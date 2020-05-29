@@ -7,6 +7,7 @@ using UnityEngine;
 public class FPSCamera : MonoBehaviour
 {
     public Camera FirstPersonCamera;
+    public Light Flashlight;
     public float horizontalSpeed, verticalSpeed;
     float horizontalMovement, verticalMovement;
     float accumulatedYRotation = 0;
@@ -23,7 +24,10 @@ public class FPSCamera : MonoBehaviour
 
         //if player hasn't looked too much up or too much down, allow it loo look more up or down. Else, keep the tracker within range
         if (Math.Abs(accumulatedYRotation) < 90)
+        {
             FirstPersonCamera.transform.Rotate(-verticalMovement, 0, 0);
+            Flashlight.transform.Rotate(-verticalMovement, 0, 0);
+        }
         else
             accumulatedYRotation -= verticalMovement;
     }

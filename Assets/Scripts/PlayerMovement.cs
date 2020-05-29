@@ -8,6 +8,7 @@ public class PlayerMovement : MonoBehaviour
     public float speed = 12f;
     public float gravity = -9.81f;
     public float jumpHeight = 3f;
+    public Light Flashlight;
     /*public Transform groundCheck;
     public float groundDistance = 0.4f;
     public LayerMask groundMask;*/
@@ -33,5 +34,10 @@ public class PlayerMovement : MonoBehaviour
 
         velocity.y += gravity * Time.deltaTime;
         controller.Move(velocity * Time.deltaTime);
+
+        if (SunRotation.isItNight)
+            Flashlight.intensity = 2;
+        else
+            Flashlight.intensity = 0;
     }
 }
