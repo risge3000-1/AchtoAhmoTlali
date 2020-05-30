@@ -1,6 +1,8 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -9,11 +11,19 @@ public class PlayerMovement : MonoBehaviour
     public float gravity = -9.81f;
     public float jumpHeight = 3f;
     public Light Flashlight;
+
+    public GameObject InteractionMenu;
+
     /*public Transform groundCheck;
     public float groundDistance = 0.4f;
     public LayerMask groundMask;*/
     Vector3 velocity;
     bool isGrounded;
+
+    public delegate void PositionEvents();
+    public static event PositionEvents IAmInARuin, IAmNearAMaterial, IAmNotInARuin, IAmNotNearAMaterial; 
+
+
     void Update()
     {
         /*isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
@@ -39,5 +49,29 @@ public class PlayerMovement : MonoBehaviour
             Flashlight.intensity = 2;
         else
             Flashlight.intensity = 0;
+    }
+
+    private void OnTriggerEnter(Collider collision)
+    {
+        if (collision.gameObject.GetComponent<RepairableRuin>() != null)
+        {
+            IAmInARuin();
+        }
+        else if (collision.gameObject.GetComponent<RepairingMaterialsScript>() != null)
+        {
+            IAmNearAMaterial();
+        }
+    }
+
+    private void OnTriggerExit(Collider collision)
+    {
+        if (collision.gameObject.GetComponent<RepairableRuin>() != null)
+        {
+            IAmNotInARuin();
+        }
+        else if (collision.gameObject.GetComponent<RepairingMaterialsScript>() != null)
+        {
+            IAmNotNearAMaterial();
+        }
     }
 }
