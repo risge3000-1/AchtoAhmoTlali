@@ -10,7 +10,7 @@ public class RepairableRuin : MonoBehaviour
     public bool haveIBeenRepaired = false, 
                 hasNotChangedColorsYet = true;
 
-    Collider TriggerZone;
+    //Collider TriggerZone;
 
     MeshRenderer mRenderer;
 

@@ -23,7 +23,10 @@ public class PlayerMovement : MonoBehaviour
     bool isGrounded;
 
     public delegate void PositionEvents();
-    public static event PositionEvents IAmInABrokenRuin, IamInAFixedRuin, IAmNearAMaterial, IAmNotInARuin, IAmNotNearAMaterial; 
+    public static event PositionEvents IAmInABrokenRuin, IamInAFixedRuin, IAmNearAMaterial, IAmNotInARuin, IAmNotNearAMaterial, IAmNearThePyramid, IAmNotInThePyramid;
+
+    public delegate void UserActionsEvents();
+    public static event UserActionsEvents IrepairedARuin, IDestroyedARuin, IPickedUpSomething;
 
 
     void Update()
@@ -55,13 +58,23 @@ public class PlayerMovement : MonoBehaviour
         if (aRuinHasBeenDestroyed || aRuinGotRepaired)
         {
             IAmNotInARuin();
+
+            if (aRuinGotRepaired)
+                IrepairedARuin();
+            else
+                IDestroyedARuin();
+
             aRuinGotRepaired = false;
             aRuinHasBeenDestroyed = false;
         }
+
+
+
         if (aGameItemGotPickedUp)
         {
             IAmNotNearAMaterial();
             aGameItemGotPickedUp = false;
+            IPickedUpSomething();
         }
     }
 
@@ -78,6 +91,11 @@ public class PlayerMovement : MonoBehaviour
         {
             IAmNearAMaterial();
         }
+        else if (collision.gameObject.GetComponent<PyramidControler>() != null)
+        {
+            IAmNearThePyramid();
+        }
+
     }
 
     private void OnTriggerExit(Collider collision)
@@ -89,6 +107,10 @@ public class PlayerMovement : MonoBehaviour
         else if (collision.gameObject.GetComponent<RepairingMaterialsScript>() != null)
         {
             IAmNotNearAMaterial();
+        }
+        else if (collision.gameObject.GetComponent<PyramidControler>() != null)
+        {
+            IAmNotInThePyramid();
         }
     }
 }
