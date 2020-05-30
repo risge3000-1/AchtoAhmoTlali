@@ -12,6 +12,8 @@ public class PlayerMovement : MonoBehaviour
     public float jumpHeight = 3f;
     public Light Flashlight;
 
+    public static bool aGameItemGotPickedUp = false, aRuinHasBeenDestroyed = false, aRuinGotRepaired = false;
+
     public GameObject InteractionMenu;
 
     /*public Transform groundCheck;
@@ -21,7 +23,7 @@ public class PlayerMovement : MonoBehaviour
     bool isGrounded;
 
     public delegate void PositionEvents();
-    public static event PositionEvents IAmInARuin, IAmNearAMaterial, IAmNotInARuin, IAmNotNearAMaterial; 
+    public static event PositionEvents IAmInABrokenRuin, IamInAFixedRuin, IAmNearAMaterial, IAmNotInARuin, IAmNotNearAMaterial; 
 
 
     void Update()
@@ -49,13 +51,28 @@ public class PlayerMovement : MonoBehaviour
             Flashlight.intensity = 2;
         else
             Flashlight.intensity = 0;
+
+        if (aRuinHasBeenDestroyed || aRuinGotRepaired)
+        {
+            IAmNotInARuin();
+            aRuinGotRepaired = false;
+            aRuinHasBeenDestroyed = false;
+        }
+        if (aGameItemGotPickedUp)
+        {
+            IAmNotNearAMaterial();
+            aGameItemGotPickedUp = false;
+        }
     }
 
     private void OnTriggerEnter(Collider collision)
     {
-        if (collision.gameObject.GetComponent<RepairableRuin>() != null)
+        //if I'm colliding with a ruin and this ruin has NOT ben fixed
+        if (collision.gameObject.GetComponent<RepairableRuin>() != null && collision.gameObject.GetComponent<RepairableRuin>().haveIBeenRepaired == false)
         {
-            IAmInARuin();
+            
+            IAmInABrokenRuin();
+
         }
         else if (collision.gameObject.GetComponent<RepairingMaterialsScript>() != null)
         {

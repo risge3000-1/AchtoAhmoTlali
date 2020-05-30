@@ -7,18 +7,22 @@ public class PlayerUIController : MonoBehaviour
 {
     bool isPlayerOnARuin = false, isPlayerNearAMaterial = false;
 
-    public Text RuinOptionsText, MaterialOptionsText;
-    public Image RuinOptionsBackground, MaterialOptionsBackground; 
+    public Text RuinOptionsText;
+    public Image RuinOptionsBackground;
+    public Text  GameItemOptionsText;
+    public Image GameItemOptionsBackground;
 
-    Color ruinOptionsBackgroundTint, materialOptionsBackgroundTint;
-    Color ruinOptionsTextTint, materialOptionsTextTint;
+    Color ruinOptionsBackgroundTint;
+    Color gameItemOptionsBackgroundTint;
+    Color ruinOptionsTextTint;
+    Color gameItemOptionsTextTint;
 
     readonly float changeFactor = 2;
 
     void Start()
     {
         //subscribe functions to events
-        PlayerMovement.IAmInARuin += RuinEntering;
+        PlayerMovement.IAmInABrokenRuin += RuinEntering;
         PlayerMovement.IAmNotInARuin += RuinExiting;
         PlayerMovement.IAmNearAMaterial += BeingNearAMaterial;
         PlayerMovement.IAmNotNearAMaterial += NotBeingNearAMaterial;
@@ -27,31 +31,49 @@ public class PlayerUIController : MonoBehaviour
         ruinOptionsBackgroundTint = RuinOptionsBackground.color;
         ruinOptionsTextTint = RuinOptionsText.color;
 
-        materialOptionsBackgroundTint = MaterialOptionsBackground.color;
-        materialOptionsTextTint = MaterialOptionsText.color;
+        gameItemOptionsBackgroundTint = GameItemOptionsBackground.color;
+        gameItemOptionsTextTint = GameItemOptionsText.color;
 
         //set colors's alpha to 0
         ruinOptionsBackgroundTint.a = 0;
         ruinOptionsTextTint.a = 0;
 
-        materialOptionsBackgroundTint.a = 0;
-        materialOptionsTextTint.a = 0;
+        gameItemOptionsBackgroundTint.a = 0;
+        gameItemOptionsTextTint.a = 0;
     }
 
     private void Update()
     {
         //Debug.Log("When entering the update function, I read TPIONAR as " + isPlayerOnARuin + " and IPNAM as " + isPlayerNearAMaterial);
 
-        if (isPlayerNearAMaterial)
+        if (isPlayerNearAMaterial && !isPlayerOnARuin)
         {
-            materialOptionsBackgroundTint.a -= Time.deltaTime * changeFactor;
-            materialOptionsTextTint.a -= Time.deltaTime * changeFactor;
+            gameItemOptionsBackgroundTint.a += Time.deltaTime * changeFactor;
+            gameItemOptionsTextTint.a += Time.deltaTime * changeFactor;
+
+            ruinOptionsBackgroundTint.a -= Time.deltaTime * changeFactor;
+            ruinOptionsTextTint.a -= Time.deltaTime * changeFactor;
+        }
+        else if (isPlayerOnARuin)
+        {
+            gameItemOptionsBackgroundTint.a -= Time.deltaTime * changeFactor;
+            gameItemOptionsTextTint.a -= Time.deltaTime * changeFactor;
+
+            ruinOptionsBackgroundTint.a += Time.deltaTime * changeFactor;
+            ruinOptionsTextTint.a += Time.deltaTime * changeFactor;
+        }
+        else
+        {
+            gameItemOptionsBackgroundTint.a -= Time.deltaTime * changeFactor;
+            gameItemOptionsTextTint.a -= Time.deltaTime * changeFactor;
+
+            ruinOptionsBackgroundTint.a -= Time.deltaTime * changeFactor;
+            ruinOptionsTextTint.a -= Time.deltaTime * changeFactor;
         }
 
+        Debug.Log("IsPlayerOnARuin as " + isPlayerOnARuin + " and IsPlayerNearAMaterial as " + isPlayerNearAMaterial);
 
-        Debug.Log("Alpha vaules I take: MatT:" + materialOptionsTextTint.a + " MatB:" + materialOptionsBackgroundTint.a + " RuiT:" + ruinOptionsTextTint.a + "RuiB:" + ruinOptionsBackgroundTint.a);
-
-        /*if (ruinOptionsBackgroundTint.a < 0)
+        if (ruinOptionsBackgroundTint.a < 0)
         {
             ruinOptionsBackgroundTint.a = 0;
             ruinOptionsTextTint.a = 0;
@@ -61,24 +83,24 @@ public class PlayerUIController : MonoBehaviour
             ruinOptionsBackgroundTint.a = 1;
             ruinOptionsTextTint.a = 1;
         }
-        if (materialOptionsBackgroundTint.a < 0)
+        if (gameItemOptionsBackgroundTint.a < 0)
         {
-            materialOptionsBackgroundTint.a = 0;
-            materialOptionsTextTint.a = 0;
+            gameItemOptionsBackgroundTint.a = 0;
+            gameItemOptionsTextTint.a = 0;
         }
-        if (materialOptionsBackgroundTint.a > 1)
+        if (gameItemOptionsBackgroundTint.a > 1)
         {
-            materialOptionsBackgroundTint.a = 1;
-            materialOptionsTextTint.a = 1;
-        }*/
+            gameItemOptionsBackgroundTint.a = 1;
+            gameItemOptionsTextTint.a = 1;
+        }
 
 
 
         //asign new values
         RuinOptionsBackground.color = ruinOptionsBackgroundTint;
         RuinOptionsText.color = ruinOptionsTextTint;
-        MaterialOptionsBackground.color = ruinOptionsBackgroundTint;
-        MaterialOptionsText.color = ruinOptionsTextTint;
+        GameItemOptionsBackground.color = gameItemOptionsBackgroundTint;
+        GameItemOptionsText.color = gameItemOptionsTextTint;
 
 
 
