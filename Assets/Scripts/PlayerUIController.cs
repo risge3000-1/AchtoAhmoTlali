@@ -25,12 +25,12 @@ public class PlayerUIController : MonoBehaviour
 
     public string infoAmoutMissingRuins;
 
-    Color ruinOptionsBackgroundTint;
-    Color gameItemOptionsBackgroundTint;
-    Color ruinOptionsTextTint;
-    Color gameItemOptionsTextTint;
-    Color missingRuinsTextTint;
-    Color missingRuinsBackgroundTint;
+    Color newRuinOptionsBackgroundTint;
+    Color newGameItemOptionsBackgroundTint;
+    Color newRuinOptionsTextTint;
+    Color newGameItemOptionsTextTint;
+    Color newMissingRuinsTextTint;
+    Color newMissingRuinsBackgroundTint;
 
     readonly float changeFactor = 2;
 
@@ -51,30 +51,32 @@ public class PlayerUIController : MonoBehaviour
 
 
         //copy current color values to avoid discrepancies
-        ruinOptionsBackgroundTint = RuinOptionsBackground.color;
-        ruinOptionsTextTint = RuinOptionsText.color;
+        newRuinOptionsBackgroundTint = RuinOptionsBackground.color;
+        newRuinOptionsTextTint = RuinOptionsText.color;
 
-        gameItemOptionsBackgroundTint = GameItemOptionsBackground.color;
-        gameItemOptionsTextTint = GameItemOptionsText.color;
+        newGameItemOptionsBackgroundTint = GameItemOptionsBackground.color;
+        newGameItemOptionsTextTint = GameItemOptionsText.color;
 
-        missingRuinsBackgroundTint = MissingRuinsBackground.color;
-        missingRuinsTextTint = MissingRuinsText.color;
+        newMissingRuinsBackgroundTint = MissingRuinsBackground.color;
+        newMissingRuinsTextTint = MissingRuinsText.color;
 
         //set colors's alpha to 0
-        ruinOptionsBackgroundTint.a = 0;
-        ruinOptionsTextTint.a = 0;
+        newRuinOptionsBackgroundTint.a = 0;
+        newRuinOptionsTextTint.a = 0;
 
-        gameItemOptionsBackgroundTint.a = 0;
-        gameItemOptionsTextTint.a = 0;
+        newGameItemOptionsBackgroundTint.a = 0;
+        newGameItemOptionsTextTint.a = 0;
 
-        missingRuinsTextTint.a = 0;
-        missingRuinsBackgroundTint.a = 0;
+        newMissingRuinsTextTint.a = 0;
+        newMissingRuinsBackgroundTint.a = 0;
 
-        AlterMissingRuinsMessage();
     }
 
     private void Update()
     {
+        //This is Only to fix the bug for when the payer interacts with te first ruin.
+        AlterMissingRuinsMessage();
+
         //Debug.Log("When entering the update function, I read TPIONAR as " + isPlayerOnARuin + " and IPNAM as " + isPlayerNearAMaterial);
 
         if (isPlayerNearAMaterial && !isPlayerOnARuin)
@@ -93,38 +95,40 @@ public class PlayerUIController : MonoBehaviour
         {
             ColorClearnessManager(WhatInfoHasPriority.nothing);
         }
+
+ 
     }
 
     void ColorClearnessManager(WhatInfoHasPriority infoThatHasToBePrioritized)
     {
-        float NewValueToAssign = Time.deltaTime * changeFactor;
+        float newAlphaValueToAssign = Time.deltaTime * changeFactor;
 
-        gameItemOptionsBackgroundTint.a -= NewValueToAssign;
-        gameItemOptionsTextTint.a -= NewValueToAssign;
+        newGameItemOptionsBackgroundTint.a -= newAlphaValueToAssign;
+        newGameItemOptionsTextTint.a -= newAlphaValueToAssign;
 
-        ruinOptionsBackgroundTint.a -= NewValueToAssign;
-        ruinOptionsTextTint.a -= NewValueToAssign;
+        newRuinOptionsBackgroundTint.a -= newAlphaValueToAssign;
+        newRuinOptionsTextTint.a -= newAlphaValueToAssign;
 
-        missingRuinsTextTint.a -= NewValueToAssign;
-        missingRuinsBackgroundTint.a -= NewValueToAssign;
+        newMissingRuinsTextTint.a -= newAlphaValueToAssign;
+        newMissingRuinsBackgroundTint.a -= newAlphaValueToAssign;
 
         switch (infoThatHasToBePrioritized)
         {
             case WhatInfoHasPriority.itemOptions:
-                gameItemOptionsBackgroundTint.a += NewValueToAssign * 2;
-                gameItemOptionsTextTint.a += NewValueToAssign * 2;
+                newGameItemOptionsBackgroundTint.a += newAlphaValueToAssign * 2;
+                newGameItemOptionsTextTint.a += newAlphaValueToAssign * 2;
                 break;
             
             case WhatInfoHasPriority.ruinOptions:
-                ruinOptionsBackgroundTint.a += NewValueToAssign * 2;
-                ruinOptionsTextTint.a += NewValueToAssign * 2;
+                newRuinOptionsBackgroundTint.a += newAlphaValueToAssign * 2;
+                newRuinOptionsTextTint.a += newAlphaValueToAssign * 2;
                 break;
             
             case WhatInfoHasPriority.missingRuins:
                 if (showMissingRuinsInfo)
                 {
-                    missingRuinsTextTint.a += NewValueToAssign * 2;
-                    missingRuinsBackgroundTint.a += NewValueToAssign * 2;
+                    newMissingRuinsTextTint.a += newAlphaValueToAssign * 2;
+                    newMissingRuinsBackgroundTint.a += newAlphaValueToAssign * 2;
                 }
                 break;
             
@@ -136,47 +140,47 @@ public class PlayerUIController : MonoBehaviour
 
 
 
-        if (ruinOptionsBackgroundTint.a < 0)
+        if (newRuinOptionsBackgroundTint.a < 0)
         {
-            ruinOptionsBackgroundTint.a = 0;
-            ruinOptionsTextTint.a = 0;
+            newRuinOptionsBackgroundTint.a = 0;
+            newRuinOptionsTextTint.a = 0;
         }
-        else if (ruinOptionsBackgroundTint.a > 1)
+        else if (newRuinOptionsBackgroundTint.a > 1)
         {
-            ruinOptionsBackgroundTint.a = 1;
-            ruinOptionsTextTint.a = 1;
+            newRuinOptionsBackgroundTint.a = 1;
+            newRuinOptionsTextTint.a = 1;
         }
         
-        if (gameItemOptionsBackgroundTint.a < 0)
+        if (newGameItemOptionsBackgroundTint.a < 0)
         {
-            gameItemOptionsBackgroundTint.a = 0;
-            gameItemOptionsTextTint.a = 0;
+            newGameItemOptionsBackgroundTint.a = 0;
+            newGameItemOptionsTextTint.a = 0;
         }
-        else if (gameItemOptionsBackgroundTint.a > 1)
+        else if (newGameItemOptionsBackgroundTint.a > 1)
         {
-            gameItemOptionsBackgroundTint.a = 1;
-            gameItemOptionsTextTint.a = 1;
-        }
-
-        if (missingRuinsBackgroundTint.a < 0)
-        {
-            missingRuinsBackgroundTint.a = 0;
-            missingRuinsTextTint.a = 0;
-        }
-        else if (missingRuinsBackgroundTint.a > 1)
-        {
-            missingRuinsBackgroundTint.a = 1;
-            missingRuinsTextTint.a = 1;
+            newGameItemOptionsBackgroundTint.a = 1;
+            newGameItemOptionsTextTint.a = 1;
         }
 
+        if (newMissingRuinsBackgroundTint.a < 0)
+        {
+            newMissingRuinsBackgroundTint.a = 0;
+            newMissingRuinsTextTint.a = 0;
+        }
+        else if (newMissingRuinsBackgroundTint.a > 1)
+        {
+            newMissingRuinsBackgroundTint.a = 1;
+            newMissingRuinsTextTint.a = 1;
+        }
 
 
-        RuinOptionsBackground.color = ruinOptionsBackgroundTint;
-        RuinOptionsText.color = ruinOptionsTextTint;
-        GameItemOptionsBackground.color = gameItemOptionsBackgroundTint;
-        GameItemOptionsText.color = gameItemOptionsTextTint;
-        MissingRuinsText.color = missingRuinsTextTint;
-        MissingRuinsBackground.color = missingRuinsBackgroundTint;
+
+        RuinOptionsBackground.color = newRuinOptionsBackgroundTint;
+        RuinOptionsText.color = newRuinOptionsTextTint;
+        GameItemOptionsBackground.color = newGameItemOptionsBackgroundTint;
+        GameItemOptionsText.color = newGameItemOptionsTextTint;
+        MissingRuinsText.color = newMissingRuinsTextTint;
+        MissingRuinsBackground.color = newMissingRuinsBackgroundTint;
     }
 
     void RuinEntering()
@@ -216,7 +220,14 @@ public class PlayerUIController : MonoBehaviour
 
     void AlterMissingRuinsMessage()
     {
-        infoAmoutMissingRuins = ("Te faltan " + (PlayerScore.minimalRuinsTointeractWith - PlayerScore.staticRuinsPlayerHasIteractedWith) + " Ruinas por interactuar");
+        int numberOfMissingRuins = PlayerScore.minimalRuinsTointeractWith - PlayerScore.staticRuinsPlayerHasIteractedWith;
+        
+        if (numberOfMissingRuins <= 0)
+            infoAmoutMissingRuins = "You Won! The game will close itself on a moment";
+        else
+            infoAmoutMissingRuins = ("You're missing " + numberOfMissingRuins + " ruins to interact with");
+           
+        
         MissingRuinsText.text = infoAmoutMissingRuins;
     }
 }

@@ -12,7 +12,7 @@ public class PlayerMovement : MonoBehaviour
     public float jumpHeight = 3f;
     public Light Flashlight;
 
-    public static bool aGameItemGotPickedUp = false, aRuinHasBeenDestroyed = false, aRuinGotRepaired = false;
+    public static bool aGameItemGotPickedUp = false, aRuinHasBeenDestroyed = false, aRuinGotRepaired = false, hasInteractedWithAllRuins = false;
 
     public GameObject InteractionMenu;
 
@@ -28,6 +28,10 @@ public class PlayerMovement : MonoBehaviour
     public delegate void UserActionsEvents();
     public static event UserActionsEvents IrepairedARuin, IDestroyedARuin, IPickedUpSomething;
 
+    private void Start()
+    {
+        PlayerScore.HasInteractedWithAllRuins += PlayerHasInteractedWithallRuins;
+    }
 
     void Update()
     {
@@ -93,7 +97,15 @@ public class PlayerMovement : MonoBehaviour
         }
         else if (collision.gameObject.GetComponent<PyramidControler>() != null)
         {
+            Debug.Log("I read I am near a pyramid"); 
+            
             IAmNearThePyramid();
+
+
+            if (hasInteractedWithAllRuins)
+            {
+                QuitGame();
+            }
         }
 
     }
@@ -112,5 +124,16 @@ public class PlayerMovement : MonoBehaviour
         {
             IAmNotInThePyramid();
         }
+    }
+
+    private void QuitGame()
+    {
+        new WaitForSeconds(3);
+        Application.Quit();
+    }
+
+    private void PlayerHasInteractedWithallRuins()
+    {
+        hasInteractedWithAllRuins = true;
     }
 }
