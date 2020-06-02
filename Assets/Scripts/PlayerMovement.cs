@@ -66,7 +66,10 @@ public class PlayerMovement : MonoBehaviour
             if (aRuinGotRepaired)
                 IrepairedARuin();
             else
+            {
                 IDestroyedARuin();
+                RandomGameItemCreator.GenerateRandomMaterial(transform.position.x, transform.position.y, transform.position.z);
+            }
 
             aRuinGotRepaired = false;
             aRuinHasBeenDestroyed = false;

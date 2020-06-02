@@ -16,19 +16,26 @@ public class PlayerUIController : MonoBehaviour
 
     }
 
-    public Text RuinOptionsText;
+    public Text  RuinOptionsText;
     public Image RuinOptionsBackground;
+    public Text  RuinStoryText;
+    public Image RuinStoryBackground;
     public Text  GameItemOptionsText;
     public Image GameItemOptionsBackground;
-    public Text MissingRuinsText;
+    public Text  MissingRuinsText;
     public Image MissingRuinsBackground;
 
     public string infoAmoutMissingRuins;
 
     Color newRuinOptionsBackgroundTint;
-    Color newGameItemOptionsBackgroundTint;
     Color newRuinOptionsTextTint;
+
+    Color newRuinStoryBackgroundTint;
+    Color newRuinStoryTextTint;
+
+    Color newGameItemOptionsBackgroundTint;
     Color newGameItemOptionsTextTint;
+
     Color newMissingRuinsTextTint;
     Color newMissingRuinsBackgroundTint;
 
@@ -60,6 +67,9 @@ public class PlayerUIController : MonoBehaviour
         newMissingRuinsBackgroundTint = MissingRuinsBackground.color;
         newMissingRuinsTextTint = MissingRuinsText.color;
 
+        newRuinStoryBackgroundTint = RuinStoryBackground.color;
+        newRuinStoryTextTint = RuinStoryText.color;
+
         //set colors's alpha to 0
         newRuinOptionsBackgroundTint.a = 0;
         newRuinOptionsTextTint.a = 0;
@@ -69,6 +79,9 @@ public class PlayerUIController : MonoBehaviour
 
         newMissingRuinsTextTint.a = 0;
         newMissingRuinsBackgroundTint.a = 0;
+
+        newRuinStoryBackgroundTint.a = 0;
+        newRuinStoryTextTint.a = 0;
 
     }
 
@@ -99,6 +112,15 @@ public class PlayerUIController : MonoBehaviour
  
     }
 
+    private void OnTriggerEnter(Collider collider)
+    {
+        if (collider.gameObject.GetComponent<RepairableRuin>() != null)
+        {
+            Debug.Log("I enter the importing fuction");
+            RuinStoryText.text = collider.gameObject.GetComponent<RepairableRuin>().ExportStoryText();
+        }
+    }
+
     void ColorClearnessManager(WhatInfoHasPriority infoThatHasToBePrioritized)
     {
         float newAlphaValueToAssign = Time.deltaTime * changeFactor;
@@ -108,6 +130,9 @@ public class PlayerUIController : MonoBehaviour
 
         newRuinOptionsBackgroundTint.a -= newAlphaValueToAssign;
         newRuinOptionsTextTint.a -= newAlphaValueToAssign;
+
+        newRuinStoryBackgroundTint.a -= newAlphaValueToAssign;
+        newRuinStoryTextTint.a -= newAlphaValueToAssign;
 
         newMissingRuinsTextTint.a -= newAlphaValueToAssign;
         newMissingRuinsBackgroundTint.a -= newAlphaValueToAssign;
@@ -122,6 +147,9 @@ public class PlayerUIController : MonoBehaviour
             case WhatInfoHasPriority.ruinOptions:
                 newRuinOptionsBackgroundTint.a += newAlphaValueToAssign * 2;
                 newRuinOptionsTextTint.a += newAlphaValueToAssign * 2;
+
+                newRuinStoryBackgroundTint.a += newAlphaValueToAssign * 2;
+                newRuinStoryTextTint.a += newAlphaValueToAssign * 2;
                 break;
             
             case WhatInfoHasPriority.missingRuins:
@@ -137,80 +165,82 @@ public class PlayerUIController : MonoBehaviour
                 break;
         }
 
-
-
-
-        if (newRuinOptionsBackgroundTint.a < 0)
-        {
-            newRuinOptionsBackgroundTint.a = 0;
-            newRuinOptionsTextTint.a = 0;
-        }
-        else if (newRuinOptionsBackgroundTint.a > 1)
-        {
-            newRuinOptionsBackgroundTint.a = 1;
-            newRuinOptionsTextTint.a = 1;
-        }
-        
-        if (newGameItemOptionsBackgroundTint.a < 0)
-        {
-            newGameItemOptionsBackgroundTint.a = 0;
-            newGameItemOptionsTextTint.a = 0;
-        }
-        else if (newGameItemOptionsBackgroundTint.a > 1)
-        {
-            newGameItemOptionsBackgroundTint.a = 1;
-            newGameItemOptionsTextTint.a = 1;
-        }
-
-        if (newMissingRuinsBackgroundTint.a < 0)
-        {
-            newMissingRuinsBackgroundTint.a = 0;
-            newMissingRuinsTextTint.a = 0;
-        }
-        else if (newMissingRuinsBackgroundTint.a > 1)
-        {
-            newMissingRuinsBackgroundTint.a = 1;
-            newMissingRuinsTextTint.a = 1;
-        }
-
-
-
         RuinOptionsBackground.color = newRuinOptionsBackgroundTint;
         RuinOptionsText.color = newRuinOptionsTextTint;
+
+        RuinStoryBackground.color = newRuinStoryBackgroundTint;
+        RuinStoryText.color = newRuinStoryTextTint;
+
         GameItemOptionsBackground.color = newGameItemOptionsBackgroundTint;
         GameItemOptionsText.color = newGameItemOptionsTextTint;
+
         MissingRuinsText.color = newMissingRuinsTextTint;
         MissingRuinsBackground.color = newMissingRuinsBackgroundTint;
+
     }
 
     void RuinEntering()
     {
         isPlayerOnARuin = true;
+        if (newRuinOptionsBackgroundTint.a < 0)
+        {
+            newRuinOptionsBackgroundTint.a = 0;
+            newRuinOptionsTextTint.a = 0;
+            newRuinStoryBackgroundTint.a = 0;
+            newRuinStoryTextTint.a = 0;
+        }
     }
 
     void RuinExiting()
     {
-        isPlayerOnARuin = false;  
+        isPlayerOnARuin = false;
+        if (newRuinOptionsBackgroundTint.a > 1)
+        {
+            newRuinOptionsBackgroundTint.a = 1;
+            newRuinOptionsTextTint.a = 1;
+            newRuinStoryBackgroundTint.a = 1;
+            newRuinStoryTextTint.a = 1;
+        }
     }
 
     void BeingNearAMaterial()
     {
-        isPlayerNearAMaterial = true;   
+        isPlayerNearAMaterial = true;
+        if (newGameItemOptionsBackgroundTint.a < 0)
+        {
+            newGameItemOptionsBackgroundTint.a = 0;
+            newGameItemOptionsTextTint.a = 0;
+        }
     }
 
     void NotBeingNearAMaterial()
     {
-        isPlayerNearAMaterial = false;     
+        isPlayerNearAMaterial = false;
+        if (newGameItemOptionsBackgroundTint.a > 1)
+        {
+            newGameItemOptionsBackgroundTint.a = 1;
+            newGameItemOptionsTextTint.a = 1;
+        }
     }
 
     void BeingCloseToPyramid()
     {
         isPlayerNearThePyramid = true;
+        if (newMissingRuinsBackgroundTint.a < 0)
+        {
+            newMissingRuinsBackgroundTint.a = 0;
+            newMissingRuinsTextTint.a = 0;
+        }
     }
 
     void SeparatingFromPyramid()
     {
         isPlayerNearThePyramid = false;
+        if (newMissingRuinsBackgroundTint.a > 1)
+        {
+            newMissingRuinsBackgroundTint.a = 1;
+            newMissingRuinsTextTint.a = 1;
+        }
     }
 
     void DoNotShowMissingRuinsInfo()
