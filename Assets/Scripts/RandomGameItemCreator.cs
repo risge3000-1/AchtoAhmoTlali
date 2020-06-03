@@ -19,24 +19,30 @@ public class RandomGameItemCreator : MonoBehaviour
     static public void GenerateRandomMaterial(float xPosition, float yPosition, float zPosition)
     {
         int randomFactor = 0 /*Random.Range(0,3)*/;
+        GameObject materialToUse;
+
         switch (randomFactor)
         {
-            case 0:
-                Instantiate(StaticWood, new Vector3(xPosition, yPosition, zPosition), Quaternion.identity);
-                
+            case 0: /*Wood*/
+                materialToUse = StaticWood;
                 break;
-            case 1:
-                Instantiate(StaticStone, new Vector3(xPosition, yPosition, zPosition), Quaternion.identity);
+            case 1:/*Stone*/
+                materialToUse = StaticStone;
                 break;
-            case 2:
-                Instantiate(StaticRopes, new Vector3(xPosition, yPosition, zPosition), Quaternion.identity);
+            case 2: /*Ropes*/
+                materialToUse = StaticRopes;
                 break;
-            case 3:
-                Instantiate(StaticClay, new Vector3(xPosition, yPosition, zPosition), Quaternion.identity);
+            case 3:/*Clay*/
+                materialToUse = StaticClay;
                 break;
             default:
-                Debug.LogError("Random Factor in Random Item generatos is" + randomFactor);
+                Debug.LogError("Random Factor in Random Item generatos is" + randomFactor + ", using wood as Material");
+                materialToUse = StaticWood;
                 break;
         }
+
+        var obj = Instantiate(materialToUse, new Vector3(xPosition, yPosition, zPosition), Quaternion.identity);
+
+        obj.GetComponent<RepairingMaterialsScript>().IWasGeneratedFromARuinDestruction();
     }
 }
