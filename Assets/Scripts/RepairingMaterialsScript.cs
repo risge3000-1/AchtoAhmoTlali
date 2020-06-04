@@ -17,6 +17,23 @@ public class RepairingMaterialsScript : MonoBehaviour
         PlayerMovement.IAmNotInARuin += NoRuinOvelapsMeAnymore;
     }
 
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.GetComponent<PlayerMovement>() )
+        {
+            if (inventoryUI.ItemsUI.FindIndex(i => i.item == null) == -1)
+            {
+                other.gameObject.GetComponent<PlayerUIController>().GameItemOptionsText.text = "Inventory full";
+            }
+            else
+            {
+                other.gameObject.GetComponent<PlayerUIController>().GameItemOptionsText.text = ("E - Pick up " + materialName);
+            }
+            
+            
+        }
+    }
+
     private void OnTriggerStay(Collider other)
     {
         if (other.gameObject.GetComponent<PlayerMovement>() != null && !isPlayerOnARuin && doIHavePriority)

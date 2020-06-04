@@ -31,9 +31,6 @@ public class RepairableRuin : MonoBehaviour
         Item item1ToAdd = itemDatabase.GetItem(materialName:material1);
         itemsINeed.Add(item0ToAdd);
         itemsINeed.Add(item1ToAdd);
-
-        Debug.Log(itemsINeed[0]);
-        Debug.Log(itemsINeed[1]);
     }
 
     public void Update()
@@ -66,8 +63,9 @@ public class RepairableRuin : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        int validItemCounter = 0;
+        bool isItem0Aviable = false, isItem1Aviable = false ;
 
+        string messageToExport = "";
         
         if (other.gameObject.GetComponent<PlayerMovement>() != null)
         {
@@ -81,19 +79,64 @@ public class RepairableRuin : MonoBehaviour
 
             for (int i = 0; i < inventoryUI.ItemsUI.Count; i++)
             {
-                Debug.Log((inventoryUI.ItemsUI[i].item == itemsINeed[0]) + " " + (inventoryUI.ItemsUI[i].item == itemsINeed[1]));
-                
                 //if the item in the inventory slot of the player is equal to one of the required materials of the ruin, increase counter
-                if (inventoryUI.ItemsUI[i].item == itemsINeed[0] || inventoryUI.ItemsUI[i].item == itemsINeed[1])
+                if (inventoryUI.ItemsUI[i].item == itemsINeed[0] && !isItem0Aviable)
                 {
-                    validItemCounter++;
+                    isItem0Aviable = true;
+                }
+                else if (inventoryUI.ItemsUI[i].item == itemsINeed[1] && !isItem1Aviable)
+                {
+                    isItem1Aviable = true;
                 }
             }
 
-            if (validItemCounter >= 2)
+            Debug.Log("item0 is" + isItem0Aviable + "and item1 is " + isItem1Aviable);
+
+            if (isItem0Aviable == true && isItem1Aviable == true)
+            {
                 canIBeRepaired = true;
+
+               
+
+                if (itemsINeed[0].resourceName ==  itemsINeed[1].resourceName)
+                {
+                    messageToExport = "F - Destroy | E - Repair with 2 " + itemsINeed[0].resourceName ;
+                }
+                else
+                {
+                    messageToExport = "F - Destroy | E - Repair with " + itemsINeed[0].resourceName + " and " + itemsINeed[1].resourceName;
+                }
+            }    
             else
+            {
                 canIBeRepaired = false;
+
+                if (isItem0Aviable == isItem1Aviable)
+                {
+                    if (itemsINeed[0].resourceName == itemsINeed[1].resourceName)
+                    {
+                        messageToExport = "F - Destroy | You're missing 2 " + itemsINeed[0].resourceName + " items";
+                    }
+                    else
+                    {
+                        messageToExport = "F - Destroy | You're missing " + itemsINeed[0].resourceName + " and " + itemsINeed[1].resourceName;
+                    }
+                }
+                else
+                {
+                    if (!isItem0Aviable)
+                    {
+                        messageToExport = "F - Destroy | You're missing " + itemsINeed[0].resourceName;
+                    }
+                    else if (!isItem1Aviable)
+                    {
+                        messageToExport = "F - Destroy | You're missing " + itemsINeed[1].resourceName;
+                    }
+                }
+            }
+
+            other.gameObject.GetComponent<PlayerUIController>().RuinOptionsText.text = messageToExport;
+
         }
 
 
@@ -104,9 +147,9 @@ public class RepairableRuin : MonoBehaviour
       
         
         //if I'm colliding with the player AND I haven't been repaired
-        if (other.gameObject.GetComponent<PlayerMovement>() != null && !haveIBeenRepaired && canIBeRepaired)
+        if (other.gameObject.GetComponent<PlayerMovement>() != null && !haveIBeenRepaired)
         {
-            if (Input.GetKeyDown(KeyCode.E)) //decides to repair it
+            if (Input.GetKeyDown(KeyCode.E) && canIBeRepaired) //decides to repair it
             {
                 haveIBeenRepaired = true;
                 hasNotChangedColorsYet = true;
@@ -144,4 +187,5 @@ public class RepairableRuin : MonoBehaviour
         }
             
     }
+
 }
