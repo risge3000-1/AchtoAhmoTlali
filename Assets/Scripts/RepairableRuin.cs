@@ -59,7 +59,7 @@ public class RepairableRuin : MonoBehaviour
         }
         else
         {
-            RuinLight.intensity = 5;
+            RuinLight.intensity -= Time.deltaTime;
         }
 
     }
