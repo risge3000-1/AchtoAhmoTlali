@@ -14,7 +14,7 @@ public class Phase2Ruins : RepairableRuin
     }
 
     // Update is called once per frame
-    void Update()
+    new void Update()
     {
         
     }

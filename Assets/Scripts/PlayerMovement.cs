@@ -66,7 +66,10 @@ public class PlayerMovement : MonoBehaviour
             IAmNotInARuin();
 
             if (aRuinGotRepaired)
+            {
                 IrepairedARuin();
+                IamInAFixedRuin();
+            }
             else
             {
                 IDestroyedARuin();
@@ -92,10 +95,19 @@ public class PlayerMovement : MonoBehaviour
     private void OnTriggerEnter(Collider collision)
     {
         //if I'm colliding with a ruin and this ruin has NOT ben fixed
-        if (collision.gameObject.GetComponent<RepairableRuin>() != null && collision.gameObject.GetComponent<RepairableRuin>().haveIBeenRepaired == false)
+        if (collision.gameObject.GetComponent<RepairableRuin>() != null )
         {
+
+            if (collision.gameObject.GetComponent<RepairableRuin>().haveIBeenRepaired == false)
+            {
+                IAmInABrokenRuin();
+            }
+            else
+            {
+                IamInAFixedRuin();
+            }
             
-            IAmInABrokenRuin();
+            
 
         }
         else if (collision.gameObject.GetComponent<RepairingMaterialsScript>() != null)

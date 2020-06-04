@@ -5,12 +5,13 @@ using UnityEngine.UI;
 
 public class PlayerUIController : MonoBehaviour
 {
-    bool isPlayerOnARuin = false, isPlayerNearAMaterial = false, isPlayerNearThePyramid = false, showMissingRuinsInfo = true, CanPlayerRepairRuin = false;
+    bool isPlayerOnARuin = false, isPlayerNearAMaterial = false, isPlayerNearThePyramid = false, showMissingRuinsInfo = true, isPlayerOnAFixedRuin = false, haveIImportedTheRuinStory = false;
 
     public enum WhatInfoHasPriority
     {
         itemOptions,
         ruinOptions,
+        ruinStory,
         missingRuins,
         nothing
 
@@ -45,9 +46,12 @@ public class PlayerUIController : MonoBehaviour
     {
         //subscribe functions to events
         PlayerMovement.IAmInABrokenRuin += RuinEntering;
+        PlayerMovement.IamInAFixedRuin += FixedRuinEntering;
         PlayerMovement.IAmNotInARuin += RuinExiting;
+
         PlayerMovement.IAmNearAMaterial += BeingNearAMaterial;
         PlayerMovement.IAmNotNearAMaterial += NotBeingNearAMaterial;
+
         PlayerMovement.IAmNearThePyramid += BeingCloseToPyramid;
         PlayerMovement.IAmNotInThePyramid += SeparatingFromPyramid;
 
@@ -100,6 +104,10 @@ public class PlayerUIController : MonoBehaviour
         {
             ColorClearnessManager(WhatInfoHasPriority.missingRuins);
         }
+        else if (isPlayerOnAFixedRuin)
+        {
+            ColorClearnessManager(WhatInfoHasPriority.ruinStory);
+        }
         else if (isPlayerOnARuin)
         {
             ColorClearnessManager(WhatInfoHasPriority.ruinOptions);
@@ -112,12 +120,12 @@ public class PlayerUIController : MonoBehaviour
  
     }
 
-    private void OnTriggerEnter(Collider collider)
+    private void OnTriggerStay(Collider collider)
     {
-        if (collider.gameObject.GetComponent<RepairableRuin>() != null)
+        if (collider.gameObject.GetComponent<RepairableRuin>() != null && !haveIImportedTheRuinStory)
         {
-            Debug.Log("I enter the importing fuction");
             RuinStoryText.text = collider.gameObject.GetComponent<RepairableRuin>().ExportStoryText();
+            haveIImportedTheRuinStory = true;
         }
     }
 
@@ -159,7 +167,10 @@ public class PlayerUIController : MonoBehaviour
                     newMissingRuinsBackgroundTint.a += newAlphaValueToAssign * 2;
                 }
                 break;
-            
+            case WhatInfoHasPriority.ruinStory:
+                newRuinStoryBackgroundTint.a += newAlphaValueToAssign * 2;
+                newRuinStoryTextTint.a += newAlphaValueToAssign * 2;
+                break;
             case WhatInfoHasPriority.nothing:
             default:
                 break;
@@ -182,10 +193,24 @@ public class PlayerUIController : MonoBehaviour
     void RuinEntering()
     {
         isPlayerOnARuin = true;
+        haveIImportedTheRuinStory = false;
+
         if (newRuinOptionsBackgroundTint.a < 0)
         {
             newRuinOptionsBackgroundTint.a = 0;
             newRuinOptionsTextTint.a = 0;
+            newRuinStoryBackgroundTint.a = 0;
+            newRuinStoryTextTint.a = 0;
+        }
+    }
+
+    void FixedRuinEntering()
+    {
+        isPlayerOnAFixedRuin = true;
+        haveIImportedTheRuinStory = false;
+
+        if (newRuinStoryBackgroundTint.a < 0)
+        {
             newRuinStoryBackgroundTint.a = 0;
             newRuinStoryTextTint.a = 0;
         }

@@ -177,12 +177,10 @@ public class RepairableRuin : MonoBehaviour
     {
         if (haveIBeenRepaired)
         {
-            Debug.Log("I read that i need to return the repaired text wich is \"" + historyWhenRepaired + "\"");
             return historyWhenRepaired;
         }   
         else
         {
-            Debug.Log("I read that i need to return the incomplete text wich is \"" + historyWhenNotRepaired + "\"");
             return historyWhenNotRepaired;
         }
             
