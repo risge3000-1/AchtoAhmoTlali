@@ -9,7 +9,7 @@ public class Item
     public Sprite icon;
     public Dictionary<string, int> ItemsDict = new Dictionary<string, int>();
 
-    public Item (int id, string resourceName, Dictionary<string, int> ItemsDict)
+    public Item (int id, string resourceName)
     {
         this.id = id;
         this.resourceName = resourceName;

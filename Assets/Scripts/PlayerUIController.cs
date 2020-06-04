@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class PlayerUIController : MonoBehaviour
 {
-    bool isPlayerOnARuin = false, isPlayerNearAMaterial = false, isPlayerNearThePyramid = false, showMissingRuinsInfo = true;
+    bool isPlayerOnARuin = false, isPlayerNearAMaterial = false, isPlayerNearThePyramid = false, showMissingRuinsInfo = true, CanPlayerRepairRuin = false;
 
     public enum WhatInfoHasPriority
     {

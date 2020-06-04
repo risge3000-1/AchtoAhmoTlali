@@ -15,6 +15,7 @@ public class ItemUI : MonoBehaviour
     }
 
     public void UpdateItem(Item item)
+
     {
         this.item = item;
 
@@ -23,6 +24,8 @@ public class ItemUI : MonoBehaviour
         {
             spriteImage.color = Color.white;
             spriteImage.sprite = this.item.icon;
+           
+
         }
         else
         {

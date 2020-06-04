@@ -8,11 +8,17 @@ public class Inventory : MonoBehaviour
     public ItemDatabase itemDatabase;
     public InventoryUI inventoryUI;
 
-    private void Start()
+    bool doOnce = false;
+
+    private void Update()
     {
-        GiveItem("ropes");
-        GiveItem(1);
-        //RemoveItem(1);
+        if (!doOnce)
+        {
+            
+            doOnce = true;
+        }
+
+
     }
 
     public void GiveItem(int id)
@@ -27,6 +33,7 @@ public class Inventory : MonoBehaviour
     {
         Item itemToAdd = itemDatabase.GetItem(itemType);
         characterItems.Add(itemToAdd);
+        inventoryUI.AddNewItem(itemToAdd);
         Debug.Log("Added item " + itemToAdd.resourceName);
     }
 
@@ -35,9 +42,30 @@ public class Inventory : MonoBehaviour
         return characterItems.Find(item => item.id == id0);
     }
 
+    public Item CheckForItem(string typeOfMaterial)
+    {
+        return characterItems.Find(item => item.resourceName == typeOfMaterial);
+    }
+
+    public void ChecKForTwoMaterials(string material0, string material1)
+    {
+        
+    }
+
     public void RemoveItem (int id)
     {
         Item itemToRemove = CheckForItem(id);
+        if (itemToRemove != null)
+        {
+            characterItems.Remove(itemToRemove);
+            inventoryUI.RemoveItem(itemToRemove);
+            Debug.Log("Item removed: " + itemToRemove.resourceName);
+        }
+    }
+
+    public void RemoveItem(string itemType)
+    {
+        Item itemToRemove = CheckForItem(itemType);
         if (itemToRemove != null)
         {
             characterItems.Remove(itemToRemove);

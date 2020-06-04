@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking.Match;
 
 public class InventoryUI : MonoBehaviour
 {
@@ -16,6 +17,11 @@ public class InventoryUI : MonoBehaviour
             GameObject instantiate = Instantiate(slotPrefab);
             instantiate.transform.SetParent(slotPanel);
             ItemsUI.Add(instantiate.GetComponentInChildren<ItemUI>());
+
+            //set cloned gameObject near because I Don't know why unity sets them at 500 scale, rotated and misplaced in the lines above
+            instantiate.transform.localScale = new Vector3(1, 1, 1);
+            instantiate.transform.localPosition = new Vector3(0, 0, 0);
+            instantiate.transform.localRotation = new Quaternion(0, 0, 0, 1);
         }
     }
 

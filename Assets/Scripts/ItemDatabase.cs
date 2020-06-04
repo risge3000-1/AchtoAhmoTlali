@@ -19,6 +19,9 @@ public class ItemDatabase : MonoBehaviour
 
     public Item GetItem(string materialName)
     {
+        Debug.Log("I enter the Getitem fuction with string " + materialName);
+        Debug.Log("The find function returns " + items.Find(item => item.resourceName == materialName));
+        
         return items.Find(item => item.resourceName == materialName);
     }
 
@@ -26,10 +29,10 @@ public class ItemDatabase : MonoBehaviour
     {
         items = new List<Item>() 
         {
-            new Item(0, "wood",  new Dictionary<string, int>{ }),
-            new Item(1, "stone", new Dictionary<string, int>{ }),
-            new Item(2, "ropes", new Dictionary<string, int>{ }),
-            new Item(3, "clay",  new Dictionary<string, int>{ })
+            new Item(0, "wood"),
+            new Item(1, "stone"),
+            new Item(2, "ropes"),
+            new Item(3, "clay")
         };
     }
 }

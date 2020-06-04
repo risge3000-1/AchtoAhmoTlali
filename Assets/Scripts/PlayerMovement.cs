@@ -7,12 +7,14 @@ using UnityEngine.UI;
 public class PlayerMovement : MonoBehaviour
 {
     public CharacterController controller;
+
     public float speed = 12f;
     public float gravity = -9.81f;
     public float jumpHeight = 3f;
     public Light Flashlight;
 
     public static bool aGameItemGotPickedUp = false, aRuinHasBeenDestroyed = false, aRuinGotRepaired = false, hasInteractedWithAllRuins = false;
+    public static string materialTypeToGive;
 
     public GameObject InteractionMenu;
 
@@ -81,7 +83,9 @@ public class PlayerMovement : MonoBehaviour
         {
             IAmNotNearAMaterial();
             aGameItemGotPickedUp = false;
-            IPickedUpSomething();
+            gameObject.GetComponent<Inventory>().GiveItem(itemType:materialTypeToGive);
+            materialTypeToGive = "" ;
+            //IPickedUpSomething();
         }
     }
 

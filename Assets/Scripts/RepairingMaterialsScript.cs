@@ -8,6 +8,7 @@ public class RepairingMaterialsScript : MonoBehaviour
     bool isPlayerOnARuin = false;
     public bool wasIGeneratedFromARuin = false;
     bool doIHavePriority = true;
+    public string materialName;
     
     private void Start()
     {
@@ -46,6 +47,8 @@ public class RepairingMaterialsScript : MonoBehaviour
     void AddToInventory()
     {
         PlayerMovement.aGameItemGotPickedUp = true;
+        PlayerMovement.materialTypeToGive = materialName;
+        
         gameObject.SetActive(false);
     }
 
