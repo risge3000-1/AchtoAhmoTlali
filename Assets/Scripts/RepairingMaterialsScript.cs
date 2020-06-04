@@ -9,6 +9,7 @@ public class RepairingMaterialsScript : MonoBehaviour
     public bool wasIGeneratedFromARuin = false;
     bool doIHavePriority = true;
     public string materialName;
+    public InventoryUI inventoryUI;
     
     private void Start()
     {
@@ -20,7 +21,9 @@ public class RepairingMaterialsScript : MonoBehaviour
     {
         if (other.gameObject.GetComponent<PlayerMovement>() != null && !isPlayerOnARuin && doIHavePriority)
         {
-            if (Input.GetKeyDown(KeyCode.E))
+            Debug.Log("I read the current Index as " + inventoryUI.ItemsUI.FindIndex(i => i.item == null));
+
+            if (Input.GetKeyDown(KeyCode.E) && inventoryUI.ItemsUI.FindIndex(i => i.item == null) != -1)
             {
                 AddToInventory();
             }

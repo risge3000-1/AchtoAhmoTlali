@@ -2,8 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class IAmTheObjectYoWantToFind : MonoBehaviour
+public class Phase2Ruins : RepairableRuin
 {
+    int ruinId;
+
+
     // Start is called before the first frame update
     void Start()
     {
