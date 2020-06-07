@@ -19,9 +19,6 @@ public class ItemDatabase : MonoBehaviour
 
     public Item GetItem(string materialName)
     {
-        Debug.Log("I enter the Getitem fuction with string " + materialName);
-        Debug.Log("The find function returns " + items.Find(item => item.resourceName == materialName));
-        
         return items.Find(item => item.resourceName == materialName);
     }
 

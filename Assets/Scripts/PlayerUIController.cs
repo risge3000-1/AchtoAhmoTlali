@@ -7,6 +7,8 @@ public class PlayerUIController : MonoBehaviour
 {
     bool isPlayerOnARuin = false, isPlayerNearAMaterial = false, isPlayerNearThePyramid = false, showMissingRuinsInfo = true, isPlayerOnAFixedRuin = false, haveIImportedTheRuinStory = false;
 
+
+    bool doOnce = false;
     public enum WhatInfoHasPriority
     {
         itemOptions,
@@ -92,10 +94,13 @@ public class PlayerUIController : MonoBehaviour
     private void Update()
     {
         //This is Only to fix the bug for when the payer interacts with te first ruin.
-        AlterMissingRuinsMessage();
 
-        //Debug.Log("When entering the update function, I read TPIONAR as " + isPlayerOnARuin + " and IPNAM as " + isPlayerNearAMaterial);
-
+        if (!doOnce)
+        {
+            AlterMissingRuinsMessage();
+            doOnce = true;
+        }
+        
         if (isPlayerNearAMaterial && !isPlayerOnARuin)
         {
             ColorClearnessManager(WhatInfoHasPriority.itemOptions);
@@ -126,6 +131,7 @@ public class PlayerUIController : MonoBehaviour
         {
             RuinStoryText.text = collider.gameObject.GetComponent<RepairableRuin>().ExportStoryText();
             haveIImportedTheRuinStory = true;
+            doOnce = false;
         }
     }
 
@@ -187,6 +193,8 @@ public class PlayerUIController : MonoBehaviour
 
         MissingRuinsText.color = newMissingRuinsTextTint;
         MissingRuinsBackground.color = newMissingRuinsBackgroundTint;
+
+
 
     }
 
@@ -265,6 +273,8 @@ public class PlayerUIController : MonoBehaviour
         {
             newMissingRuinsBackgroundTint.a = 1;
             newMissingRuinsTextTint.a = 1;
+            newRuinStoryBackgroundTint.a = 1;
+            newRuinStoryTextTint.a = 1;
         }
     }
 

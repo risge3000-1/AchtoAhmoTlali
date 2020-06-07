@@ -26,7 +26,6 @@ public class Inventory : MonoBehaviour
         Item itemToAdd = itemDatabase.GetItem(id);
         characterItems.Add(itemToAdd);
         inventoryUI.AddNewItem(itemToAdd);
-        Debug.Log("Added item " + itemToAdd.resourceName);
     }
 
     public void GiveItem(string itemType)
@@ -34,7 +33,6 @@ public class Inventory : MonoBehaviour
         Item itemToAdd = itemDatabase.GetItem(itemType);
         characterItems.Add(itemToAdd);
         inventoryUI.AddNewItem(itemToAdd);
-        Debug.Log("Added item " + itemToAdd.resourceName);
     }
 
     public Item CheckForItem(int id0)
@@ -59,7 +57,6 @@ public class Inventory : MonoBehaviour
         {
             characterItems.Remove(itemToRemove);
             inventoryUI.RemoveItem(itemToRemove);
-            Debug.Log("Item removed: " + itemToRemove.resourceName);
         }
     }
 
@@ -70,7 +67,6 @@ public class Inventory : MonoBehaviour
         {
             characterItems.Remove(itemToRemove);
             inventoryUI.RemoveItem(itemToRemove);
-            Debug.Log("Item removed: " + itemToRemove.resourceName);
         }
     }
 

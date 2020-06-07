@@ -115,11 +115,8 @@ public class PlayerMovement : MonoBehaviour
             IAmNearAMaterial();
         }
         else if (collision.gameObject.GetComponent<PyramidControler>() != null)
-        {
-            Debug.Log("I read I am near a pyramid"); 
-            
+        {            
             IAmNearThePyramid();
-
 
             if (hasInteractedWithAllRuins)
             {

@@ -90,8 +90,6 @@ public class RepairableRuin : MonoBehaviour
                 }
             }
 
-            Debug.Log("item0 is" + isItem0Aviable + "and item1 is " + isItem1Aviable);
-
             if (isItem0Aviable == true && isItem1Aviable == true)
             {
                 canIBeRepaired = true;

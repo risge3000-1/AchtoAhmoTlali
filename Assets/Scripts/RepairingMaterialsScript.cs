@@ -38,8 +38,6 @@ public class RepairingMaterialsScript : MonoBehaviour
     {
         if (other.gameObject.GetComponent<PlayerMovement>() != null && !isPlayerOnARuin && doIHavePriority)
         {
-            Debug.Log("I read the current Index as " + inventoryUI.ItemsUI.FindIndex(i => i.item == null));
-
             if (Input.GetKeyDown(KeyCode.E) && inventoryUI.ItemsUI.FindIndex(i => i.item == null) != -1)
             {
                 AddToInventory();
