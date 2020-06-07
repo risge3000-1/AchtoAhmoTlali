@@ -49,7 +49,7 @@ public class RepairableRuin : MonoBehaviour
 
         if (isPlayerNearMe)
         {
-            if (RuinLight.intensity <= 5)
+            if (RuinLight.intensity <= 6)
             {
                 RuinLight.intensity += Time.deltaTime * 4;
             }  
