@@ -95,11 +95,7 @@ public class PlayerUIController : MonoBehaviour
     {
         //This is Only to fix the bug for when the payer interacts with te first ruin.
 
-        if (!doOnce)
-        {
-            AlterMissingRuinsMessage();
-            doOnce = true;
-        }
+        //AlterMissingRuinsMessage();
         
         if (isPlayerNearAMaterial && !isPlayerOnARuin)
         {
@@ -283,10 +279,14 @@ public class PlayerUIController : MonoBehaviour
         showMissingRuinsInfo = false;
     }
 
-    void AlterMissingRuinsMessage()
+    public void AlterMissingRuinsMessage()
     {
-        int numberOfMissingRuins = PlayerScore.minimalRuinsTointeractWith - PlayerScore.staticRuinsPlayerHasIteractedWith;
         
+        
+        int numberOfMissingRuins = PlayerScore.minimalRuinsTointeractWith - PlayerScore.staticRuinsPlayerHasIteractedWith;
+
+        Debug.Log("I enter the message importing function with total ruins as " + numberOfMissingRuins + ", minimal as " + PlayerScore.minimalRuinsTointeractWith + " and total interacted as " + PlayerScore.staticRuinsPlayerHasIteractedWith);
+
         if (numberOfMissingRuins <= 0)
             infoAmoutMissingRuins = "You Won! The game will close itself on a moment";
         else

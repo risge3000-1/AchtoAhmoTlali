@@ -26,12 +26,15 @@ public class PlayerScore : MonoBehaviour
 
     public void IncreaseDestroyedRuins()
     {
-        
+        Debug.Log("I enter the update destroyed ruins function"); 
         ruinsPlayerHasIteractedWith++;
         staticRuinsPlayerHasIteractedWith = ruinsPlayerHasIteractedWith;
 
-
+        
         destroyedRuins++;
+
+        Debug.Log("total as " + staticRuinsPlayerHasIteractedWith + " and destroyed as " + destroyedRuins);
+
         CheckTotalScore();
     }
 
@@ -54,6 +57,8 @@ public class PlayerScore : MonoBehaviour
         {
             HasInteractedWithAllRuins();
         }
+
+        gameObject.GetComponent<PlayerUIController>().AlterMissingRuinsMessage();
     } 
 
 }
