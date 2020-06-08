@@ -184,6 +184,8 @@ public class PlayerUIController : MonoBehaviour
         RuinStoryBackground.color = newRuinStoryBackgroundTint;
         RuinStoryText.color = newRuinStoryTextTint;
 
+        Debug.Log("Text.a as" + RuinStoryText.color.a + " and BG.a as " + RuinStoryBackground.color.a);
+
         GameItemOptionsBackground.color = newGameItemOptionsBackgroundTint;
         GameItemOptionsText.color = newGameItemOptionsTextTint;
 
@@ -223,6 +225,7 @@ public class PlayerUIController : MonoBehaviour
     void RuinExiting()
     {
         isPlayerOnARuin = false;
+        isPlayerOnAFixedRuin = false;
         if (newRuinOptionsBackgroundTint.a > 1)
         {
             newRuinOptionsBackgroundTint.a = 1;

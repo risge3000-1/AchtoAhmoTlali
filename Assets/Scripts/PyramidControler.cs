@@ -7,7 +7,9 @@ public class PyramidControler : MonoBehaviour
     MeshRenderer mRenderer;
 
     public bool hasUserinteractedWithAllRuins = false,
-              hasNotChangedColorsYet = true;
+                hasNotChangedColorsYet = true;
+
+    public bool[] isThisRuinInTheCorrectPlace = new bool[5];
 
     private void Awake()
     {

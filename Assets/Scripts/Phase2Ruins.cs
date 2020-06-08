@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Phase2Ruins : RepairableRuin
 {
-    int ruinId;
+    public int ruinId;
 
 
     // Start is called before the first frame update
