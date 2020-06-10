@@ -6,25 +6,22 @@ public class PyramidControler : MonoBehaviour
 {
     MeshRenderer mRenderer;
 
+    public Phase2Ruins[] Phase2Ruins = new Phase2Ruins[5];
+
     public bool hasUserinteractedWithAllRuins = false,
-                hasNotChangedColorsYet = true;
+                hasNotChangedColorsYet = true,
+                hasUserPutAllRuinsInTheCorrectPlace = false,
+                hasPhase2Begun = false;
+    
 
     public bool[] isThisRuinInTheCorrectPlace = new bool[5];
+
+    public string messageAboutTheRuins;
 
     private void Awake()
     {
         mRenderer = GetComponent<MeshRenderer>();
     }
-
-    private void Start()
-    {
-        PlayerScore.HasInteractedWithAllRuins += UnlockDoors;
-        PlayerScore.HasInteractedWithAllRuins += PlayerHasWon;
-    }
-
-  
-
-   
 
     public void Update()
     {
@@ -50,6 +47,33 @@ public class PyramidControler : MonoBehaviour
     private void PlayerHasWon()
     {
         hasUserinteractedWithAllRuins = true;
+    }
+
+    public void CheckPhase2Puzzle()
+    {
+        int ruinsThatHaveBeenCorrectlyPlaced = 0;
+
+        for (int i = 0; i < 5; i++)
+        {
+            if (isThisRuinInTheCorrectPlace[i])
+            {
+                ruinsThatHaveBeenCorrectlyPlaced++;
+            }
+        }
+
+        if (ruinsThatHaveBeenCorrectlyPlaced == 5)
+        {
+            PlayerHasWon();
+            UnlockDoors();
+        }
+    }
+
+    public void AnnouncePhase2Beggining()
+    {
+        for (int i = 0; i < 5; i++)
+        {
+            Phase2Ruins[i].isPhase2Active = true;
+        }
     }
 
 }

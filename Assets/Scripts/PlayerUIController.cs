@@ -118,7 +118,12 @@ public class PlayerUIController : MonoBehaviour
             ColorClearnessManager(WhatInfoHasPriority.nothing);
         }
 
- 
+        if (Input.GetKey(KeyCode.Escape))
+            Cursor.lockState = CursorLockMode.None;
+        else
+            Cursor.lockState = CursorLockMode.Locked;
+
+
     }
 
     private void OnTriggerStay(Collider collider)
@@ -183,8 +188,6 @@ public class PlayerUIController : MonoBehaviour
 
         RuinStoryBackground.color = newRuinStoryBackgroundTint;
         RuinStoryText.color = newRuinStoryTextTint;
-
-        Debug.Log("Text.a as" + RuinStoryText.color.a + " and BG.a as " + RuinStoryBackground.color.a);
 
         GameItemOptionsBackground.color = newGameItemOptionsBackgroundTint;
         GameItemOptionsText.color = newGameItemOptionsTextTint;
@@ -284,18 +287,8 @@ public class PlayerUIController : MonoBehaviour
 
     public void AlterMissingRuinsMessage()
     {
-        
-        
-        int numberOfMissingRuins = PlayerScore.minimalRuinsTointeractWith - PlayerScore.staticRuinsPlayerHasIteractedWith;
 
-        Debug.Log("I enter the message importing function with total ruins as " + numberOfMissingRuins + ", minimal as " + PlayerScore.minimalRuinsTointeractWith + " and total interacted as " + PlayerScore.staticRuinsPlayerHasIteractedWith);
-
-        if (numberOfMissingRuins <= 0)
-            infoAmoutMissingRuins = "You Won! The game will close itself on a moment";
-        else
-            infoAmoutMissingRuins = ("You're missing " + numberOfMissingRuins + " ruins to interact with");
-           
+        MissingRuinsText.text = "";
         
-        MissingRuinsText.text = infoAmoutMissingRuins;
     }
 }

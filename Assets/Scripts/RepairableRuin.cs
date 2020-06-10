@@ -9,7 +9,9 @@ public class RepairableRuin : MonoBehaviour
     public bool haveIBeenRepaired = false,
                 hasNotChangedColorsYet = true,
                 isPlayerNearMe = false,
-                canIBeRepaired = false;
+                canIBeRepaired = false,
+                amIAPhase2Ruin = false,
+                amIBeingPickedUp = false;
 
     public List<Item> itemsINeed = new List<Item>();
     public ItemDatabase itemDatabase;
@@ -39,6 +41,8 @@ public class RepairableRuin : MonoBehaviour
         {
             if (haveIBeenRepaired)
                 newColorOfLight = Color.red;
+            else if (amIBeingPickedUp)
+                newColorOfLight = Color.yellow;
             else
                 newColorOfLight = Color.green;
 
@@ -147,18 +151,25 @@ public class RepairableRuin : MonoBehaviour
         //if I'm colliding with the player AND I haven't been repaired
         if (other.gameObject.GetComponent<PlayerMovement>() != null && !haveIBeenRepaired)
         {
-            if (Input.GetKeyDown(KeyCode.E) && canIBeRepaired) //decides to repair it
+            if (!amIAPhase2Ruin || !amIBeingPickedUp)
             {
-                haveIBeenRepaired = true;
-                hasNotChangedColorsYet = true;
-                PlayerMovement.aRuinGotRepaired = true;
-                other.gameObject.GetComponent<Inventory>().RemoveItem(itemType: itemsINeed[0].resourceName);
-                other.gameObject.GetComponent<Inventory>().RemoveItem(itemType: itemsINeed[1].resourceName);
+                if (Input.GetKeyDown(KeyCode.E) && canIBeRepaired) //decides to repair it
+                {
+                    haveIBeenRepaired = true;
+                    hasNotChangedColorsYet = true;
+                    PlayerMovement.aRuinGotRepaired = true;
+                    other.gameObject.GetComponent<Inventory>().RemoveItem(itemType: itemsINeed[0].resourceName);
+                    other.gameObject.GetComponent<Inventory>().RemoveItem(itemType: itemsINeed[1].resourceName);
+                }
+                else if (Input.GetKeyDown(KeyCode.F)) //decides to destroy it
+                {
+                    PlayerMovement.aRuinHasBeenDestroyed = true;
+                    gameObject.SetActive(false);
+                }
             }
-            else if (Input.GetKeyDown(KeyCode.F)) //decides to destroy it
+            else if (amIBeingPickedUp)
             {
-                PlayerMovement.aRuinHasBeenDestroyed = true;
-                gameObject.SetActive(false);
+                hasNotChangedColorsYet = true;
             }
         }
 

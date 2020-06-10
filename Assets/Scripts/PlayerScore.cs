@@ -5,11 +5,12 @@ public class PlayerScore : MonoBehaviour
     public int ruinsPlayerHasIteractedWith = 0;
     public int repairedRuins = 0;
     public int destroyedRuins = 0;
-    static public int minimalRuinsTointeractWith = 21;
+    static public int minimalRuinsTointeractWith = 16;
     static public int staticRuinsPlayerHasIteractedWith;
 
     public delegate void ScoreEvents();
     public static event ScoreEvents HasInteractedWithAllRuins;
+    public PyramidControler pyramidControler;
 
     private void Awake()
     {
@@ -48,17 +49,18 @@ public class PlayerScore : MonoBehaviour
     }
 
     public void CheckTotalScore()
-    { 
-        //ruinsPlayerHasIteractedWith++;
-
-        //staticRuinsPlayerHasIteractedWith = ruinsPlayerHasIteractedWith;
-
-        if (ruinsPlayerHasIteractedWith >= minimalRuinsTointeractWith)
-        {
-            HasInteractedWithAllRuins();
-        }
+    {
 
         gameObject.GetComponent<PlayerUIController>().AlterMissingRuinsMessage();
-    } 
+    }
 
+    public void AlterMissingRuinsString()
+    {
+        int missingPhase1Ruins = minimalRuinsTointeractWith - ruinsPlayerHasIteractedWith;
+
+        if (missingPhase1Ruins >= 0)
+        {
+            pyramidControler.AnnouncePhase2Beggining();
+        }
+    }
 }
