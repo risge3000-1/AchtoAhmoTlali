@@ -16,6 +16,11 @@ public class Inventory : MonoBehaviour
         {
             
             doOnce = true;
+
+            for (int i = 0; i < 42; i++)
+            {
+                GiveItem(0);
+            }
         }
 
 
@@ -43,11 +48,6 @@ public class Inventory : MonoBehaviour
     public Item CheckForItem(string typeOfMaterial)
     {
         return characterItems.Find(item => item.resourceName == typeOfMaterial);
-    }
-
-    public void ChecKForTwoMaterials(string material0, string material1)
-    {
-        
     }
 
     public void RemoveItem (int id)

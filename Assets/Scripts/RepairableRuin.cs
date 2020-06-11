@@ -151,7 +151,7 @@ public class RepairableRuin : MonoBehaviour
         //if I'm colliding with the player AND I haven't been repaired
         if (other.gameObject.GetComponent<PlayerMovement>() != null && !haveIBeenRepaired)
         {
-            if (!amIAPhase2Ruin || !amIBeingPickedUp)
+            if (!amIAPhase2Ruin || (amIAPhase2Ruin && !amIBeingPickedUp) )
             {
                 if (Input.GetKeyDown(KeyCode.E) && canIBeRepaired) //decides to repair it
                 {

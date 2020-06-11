@@ -6,7 +6,7 @@ public class PyramidControler : MonoBehaviour
 {
     MeshRenderer mRenderer;
 
-    public Phase2Ruins[] Phase2Ruins = new Phase2Ruins[5];
+    public BaseReader[] ReadingBases = new BaseReader[5];
 
     public bool hasUserinteractedWithAllRuins = false,
                 hasNotChangedColorsYet = true,
@@ -15,8 +15,6 @@ public class PyramidControler : MonoBehaviour
     
 
     public bool[] isThisRuinInTheCorrectPlace = new bool[5];
-
-    public string messageAboutTheRuins;
 
     private void Awake()
     {
@@ -51,17 +49,8 @@ public class PyramidControler : MonoBehaviour
 
     public void CheckPhase2Puzzle()
     {
-        int ruinsThatHaveBeenCorrectlyPlaced = 0;
 
-        for (int i = 0; i < 5; i++)
-        {
-            if (isThisRuinInTheCorrectPlace[i])
-            {
-                ruinsThatHaveBeenCorrectlyPlaced++;
-            }
-        }
-
-        if (ruinsThatHaveBeenCorrectlyPlaced == 5)
+        if (MissingPhase2Ruins() >= 5)
         {
             PlayerHasWon();
             UnlockDoors();
@@ -72,8 +61,24 @@ public class PyramidControler : MonoBehaviour
     {
         for (int i = 0; i < 5; i++)
         {
-            Phase2Ruins[i].isPhase2Active = true;
+            ReadingBases[i].ChangesForPhase2();
         }
+        hasPhase2Begun = true;
     }
 
+
+    public int MissingPhase2Ruins()
+    {
+        int ruinsThatHaveBeenCorrectlyPlaced = 0;
+
+        for (int i = 0; i < 5; i++)
+        {
+            if (isThisRuinInTheCorrectPlace[i])
+            {
+                ruinsThatHaveBeenCorrectlyPlaced++;
+            }
+        }
+
+        return ruinsThatHaveBeenCorrectlyPlaced;
+    }
 }

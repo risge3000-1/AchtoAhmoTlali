@@ -122,6 +122,7 @@ public class PlayerMovement : MonoBehaviour
         {            
             IAmNearThePyramid();
 
+            GetComponent<PlayerUIController>().AlterMissingRuinsMessage();
             if (hasInteractedWithAllRuins)
             {
                 QuitGame();

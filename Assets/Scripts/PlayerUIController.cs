@@ -5,10 +5,13 @@ using UnityEngine.UI;
 
 public class PlayerUIController : MonoBehaviour
 {
-    bool isPlayerOnARuin = false, isPlayerNearAMaterial = false, isPlayerNearThePyramid = false, showMissingRuinsInfo = true, isPlayerOnAFixedRuin = false, haveIImportedTheRuinStory = false;
+    bool isPlayerOnARuin = false, 
+         isPlayerNearAMaterial = false, 
+         isPlayerNearThePyramid = false, 
+         showMissingRuinsInfo = true, 
+         isPlayerOnAFixedRuin = false, 
+         haveIImportedTheRuinStory = false;
 
-
-    bool doOnce = false;
     public enum WhatInfoHasPriority
     {
         itemOptions,
@@ -132,7 +135,6 @@ public class PlayerUIController : MonoBehaviour
         {
             RuinStoryText.text = collider.gameObject.GetComponent<RepairableRuin>().ExportStoryText();
             haveIImportedTheRuinStory = true;
-            doOnce = false;
         }
     }
 
@@ -287,8 +289,22 @@ public class PlayerUIController : MonoBehaviour
 
     public void AlterMissingRuinsMessage()
     {
+        int uninteractedPhase1Ruins = GetComponent<PlayerScore>().UninteractedPhase1Ruins();
+        int missingPhase2Ruins = 5 - GetComponent<PlayerScore>().pyramidControler.MissingPhase2Ruins();
 
-        MissingRuinsText.text = "";
-        
+        Debug.Log("Phase2 active is" + GetComponent<PlayerScore>().pyramidControler.hasPhase2Begun);
+
+        if (GetComponent<PlayerScore>().pyramidControler.hasUserinteractedWithAllRuins)
+        {
+            MissingRuinsText.text = "Thank you...";
+        }
+        else if (GetComponent<PlayerScore>().pyramidControler.hasPhase2Begun)
+        {
+            MissingRuinsText.text = "You're missing " + missingPhase2Ruins + " ruins to be correctly placed..";
+        }
+        else
+        {
+            MissingRuinsText.text = "You're missing " + uninteractedPhase1Ruins + " ruins to ether repair or destroy and something else...";
+        }
     }
 }

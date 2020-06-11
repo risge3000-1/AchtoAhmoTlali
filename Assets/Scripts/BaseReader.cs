@@ -7,25 +7,32 @@ public class BaseReader : MonoBehaviour
     public int correctRuinID;
     public PyramidControler pyramidControler;
     public bool isPhase2Active = false;
-
-    private void Awake()
-    {
-        ColorCheck();
-    }
+    Color newColorToassign;
 
     private void OnTriggerEnter(Collider other)
     {
+       
+       //if the ruin has the ID I want AND has been repaired,
         if (other.gameObject.GetComponent<Phase2Ruins>().ruinId == correctRuinID && other.GetComponent<Phase2Ruins>().haveIBeenRepaired)
         {
-            GetComponentInChildren<Light>().color = Color.green;
+            newColorToassign = Color.green;
+
             pyramidControler.isThisRuinInTheCorrectPlace[correctRuinID] = true;
-            pyramidControler.CheckPhase2Puzzle();
+            pyramidControler.CheckPhase2Puzzle();  
         }
         else if (other.gameObject.GetComponent<Phase2Ruins>().ruinId != correctRuinID)
         {
-            GetComponentInChildren<Light>().color = Color.red;
+            newColorToassign = Color.red;
+            
             pyramidControler.isThisRuinInTheCorrectPlace[correctRuinID] = false;
         }
+
+        if (!isPhase2Active)
+            IntensityDeactivator(true);
+
+        Debug.Log("a as" + newColorToassign.a + " and phase2Active as " + isPhase2Active);
+
+        GetComponentInChildren<Light>().color = newColorToassign;
     }
 
     private void OnTriggerExit(Collider other)
@@ -33,19 +40,34 @@ public class BaseReader : MonoBehaviour
         if (other.gameObject.GetComponent<Phase2Ruins>() != null)
         {
             GetComponentInChildren<Light>().color = Color.yellow;
+            
+            if (!isPhase2Active)
+                IntensityDeactivator(true);
+            
             pyramidControler.isThisRuinInTheCorrectPlace[correctRuinID] = false;
         }
     }
 
-    private void ColorCheck()
+    public void ChangesForPhase2()
     {
-        if (!isPhase2Active)
-        {
-            GetComponentInChildren<Light>().color = Color.clear;
-        }
+        IntensityDeactivator(false);
+        isPhase2Active = true;
+
+        GetComponentInChildren<Light>().color = Color.blue;
+        StartCoroutine(WaitSeconds(2));
+        GetComponentInChildren<Light>().color = newColorToassign;
+    }
+
+    IEnumerator WaitSeconds(int seconds)
+    {
+        yield return new WaitForSeconds(seconds);
+    }
+
+    void IntensityDeactivator(bool deactivateLight)
+    {
+        if (deactivateLight)
+            GetComponentInChildren<Light>().intensity = 0;
         else
-        {
-            GetComponentInChildren<Light>().color = Color.white;
-        }
+            GetComponentInChildren<Light>().intensity = 1.25f;
     }
 }

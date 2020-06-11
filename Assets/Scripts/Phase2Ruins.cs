@@ -13,7 +13,7 @@ public class Phase2Ruins : RepairableRuin
     private void Awake()
     {
         amIAPhase2Ruin = true;
-        //isPhase2Active = true;
+        PlayerScore.Phase2HasBegun += ChangePhase2Status;
     }
 
     private void OnMouseDown()
@@ -45,5 +45,10 @@ public class Phase2Ruins : RepairableRuin
         GetComponent<Rigidbody>().useGravity = true;
 
         GetComponent<MeshCollider>().enabled = true;
+    }
+
+    private void ChangePhase2Status()
+    {
+        isPhase2Active = true;
     }
 }
