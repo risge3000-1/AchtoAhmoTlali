@@ -13,10 +13,16 @@ public class PlayerMovement : MonoBehaviour
     public float jumpHeight = 3f;
     public Light Flashlight;
 
-    public static bool aGameItemGotPickedUp = false, aRuinHasBeenDestroyed = false, aRuinGotRepaired = false, hasInteractedWithAllRuins = false;
+    public static bool aGameItemGotPickedUp = false, 
+                       aRuinHasBeenDestroyed = false, 
+                       aRuinGotRepaired = false, 
+                       hasInteractedWithAllRuins = false;
+
     public static string materialTypeToGive;
 
     public GameObject InteractionMenu;
+
+    AudioStepsManager audioStepsManager;
 
     /*public Transform groundCheck;
     public float groundDistance = 0.4f;
@@ -33,6 +39,7 @@ public class PlayerMovement : MonoBehaviour
     private void Start()
     {
         PlayerScore.HasInteractedWithAllRuins += PlayerHasInteractedWithallRuins;
+        audioStepsManager = GetComponentInChildren<AudioStepsManager>();
     }
 
     void Update()
@@ -128,6 +135,10 @@ public class PlayerMovement : MonoBehaviour
                 QuitGame();
             }
         }
+        else if (collision.gameObject.GetComponent<WaterCollider>() != null)
+        {
+            audioStepsManager.SwitchToWater();
+        }
 
     }
 
@@ -144,6 +155,10 @@ public class PlayerMovement : MonoBehaviour
         else if (collision.gameObject.GetComponent<PyramidControler>() != null)
         {
             IAmNotInThePyramid();
+        }
+        else if (collision.gameObject.GetComponent<WaterCollider>() != null)
+        {
+            audioStepsManager.SwitchToDirt();
         }
     }
 
