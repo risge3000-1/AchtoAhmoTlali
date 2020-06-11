@@ -24,10 +24,21 @@ public class RepairableRuin : MonoBehaviour
     Light RuinLight;
 
     Color newColorOfLight;
+    new/*, because af a stupid warning, */ ParticleSystem particleSystem;
 
     private void Start()
     {
         RuinLight = gameObject.GetComponentInChildren<Light>();
+
+        if (!amIAPhase2Ruin)
+        {
+            particleSystem = GetComponentInChildren<ParticleSystem>();
+
+            particleSystem.Stop();
+
+            PyramidControler.PlayerIsNearThePyramid += ActivateParticles;
+            PyramidControler.PlayerIsNotNearThePyramid += DeactivateParticles;
+        }
 
         Item item0ToAdd = itemDatabase.GetItem(materialName:material0);
         Item item1ToAdd = itemDatabase.GetItem(materialName:material1);
@@ -193,6 +204,18 @@ public class RepairableRuin : MonoBehaviour
             return historyWhenNotRepaired;
         }
             
+    }
+
+    public void ActivateParticles()
+    {
+        if (!haveIBeenRepaired && !amIAPhase2Ruin)
+            particleSystem.Play();
+    }
+
+    public void DeactivateParticles()
+    {
+        if (!amIAPhase2Ruin)
+            particleSystem.Stop();
     }
 
 }

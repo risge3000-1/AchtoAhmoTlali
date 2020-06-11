@@ -12,6 +12,9 @@ public class PyramidControler : MonoBehaviour
                 hasNotChangedColorsYet = true,
                 hasUserPutAllRuinsInTheCorrectPlace = false,
                 hasPhase2Begun = false;
+
+    public delegate void PyramidLocationActions();
+    public static event PyramidLocationActions PlayerIsNearThePyramid, PlayerIsNotNearThePyramid;
     
 
     public bool[] isThisRuinInTheCorrectPlace = new bool[5];
@@ -31,6 +34,21 @@ public class PyramidControler : MonoBehaviour
                 mRenderer.material.color = Color.yellow;
 
             hasNotChangedColorsYet = false;
+        }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.GetComponent<PlayerMovement>() != null)
+        {
+            PlayerIsNearThePyramid();
+        }
+    }
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.GetComponent<PlayerMovement>() != null)
+        {
+            PlayerIsNotNearThePyramid();
         }
     }
 
@@ -65,7 +83,6 @@ public class PyramidControler : MonoBehaviour
         }
         hasPhase2Begun = true;
     }
-
 
     public int MissingPhase2Ruins()
     {
