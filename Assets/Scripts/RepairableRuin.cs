@@ -13,6 +13,8 @@ public class RepairableRuin : MonoBehaviour
                 amIAPhase2Ruin = false,
                 amIBeingPickedUp = false;
 
+    public bool doIHavePriority = false;
+
     public List<Item> itemsINeed = new List<Item>();
     public ItemDatabase itemDatabase;
     public InventoryUI inventoryUI;
@@ -21,13 +23,28 @@ public class RepairableRuin : MonoBehaviour
     public string historyWhenRepaired;
     public string material0, material1;
 
+
+
+    public float priorityChangeFactor = 1;
+
     Light RuinLight;
 
     Color newColorOfLight;
+    new/*, because af a stupid warning, */ ParticleSystem particleSystem;
 
     private void Start()
     {
         RuinLight = gameObject.GetComponentInChildren<Light>();
+
+        if (!amIAPhase2Ruin)
+        {
+            particleSystem = GetComponentInChildren<ParticleSystem>();
+
+            particleSystem.Stop();
+
+            PyramidControler.PlayerIsNearThePyramid += ActivateParticles;
+            PyramidControler.PlayerIsNotNearThePyramid += DeactivateParticles;
+        }
 
         Item item0ToAdd = itemDatabase.GetItem(materialName:material0);
         Item item1ToAdd = itemDatabase.GetItem(materialName:material1);
@@ -55,12 +72,12 @@ public class RepairableRuin : MonoBehaviour
         {
             if (RuinLight.intensity <= 6)
             {
-                RuinLight.intensity += Time.deltaTime * 4;
+                RuinLight.intensity += Time.deltaTime * 4 * priorityChangeFactor;
             }  
         }
         else
         {
-            RuinLight.intensity -= Time.deltaTime;
+            RuinLight.intensity -= Time.deltaTime * priorityChangeFactor;
         }
 
     }
@@ -151,7 +168,7 @@ public class RepairableRuin : MonoBehaviour
         //if I'm colliding with the player AND I haven't been repaired
         if (other.gameObject.GetComponent<PlayerMovement>() != null && !haveIBeenRepaired)
         {
-            if (!amIAPhase2Ruin || (amIAPhase2Ruin && !amIBeingPickedUp) )
+            if (!amIAPhase2Ruin || (amIAPhase2Ruin && !amIBeingPickedUp && doIHavePriority) )
             {
                 if (Input.GetKeyDown(KeyCode.E) && canIBeRepaired) //decides to repair it
                 {
@@ -193,6 +210,18 @@ public class RepairableRuin : MonoBehaviour
             return historyWhenNotRepaired;
         }
             
+    }
+
+    public void ActivateParticles()
+    {
+        if (!haveIBeenRepaired && !amIAPhase2Ruin)
+            particleSystem.Play();
+    }
+
+    public void DeactivateParticles()
+    {
+        if (!amIAPhase2Ruin)
+            particleSystem.Stop();
     }
 
 }

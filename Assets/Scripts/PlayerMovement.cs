@@ -13,10 +13,16 @@ public class PlayerMovement : MonoBehaviour
     public float jumpHeight = 3f;
     public Light Flashlight;
 
-    public static bool aGameItemGotPickedUp = false, aRuinHasBeenDestroyed = false, aRuinGotRepaired = false, hasInteractedWithAllRuins = false;
+    public static bool aGameItemGotPickedUp = false, 
+                       aRuinHasBeenDestroyed = false, 
+                       aRuinGotRepaired = false, 
+                       hasInteractedWithAllRuins = false;
+
     public static string materialTypeToGive;
 
     public GameObject InteractionMenu;
+
+    AudioStepsManager audioStepsManager;
 
     /*public Transform groundCheck;
     public float groundDistance = 0.4f;
@@ -33,6 +39,7 @@ public class PlayerMovement : MonoBehaviour
     private void Start()
     {
         PlayerScore.HasInteractedWithAllRuins += PlayerHasInteractedWithallRuins;
+        audioStepsManager = GetComponentInChildren<AudioStepsManager>();
     }
 
     void Update()
@@ -84,7 +91,10 @@ public class PlayerMovement : MonoBehaviour
             aRuinHasBeenDestroyed = false;
         }
 
-
+        if (Input.GetKeyDown(KeyCode.Q))
+        {
+            GetComponent<PlayerScore>().pyramidControler.AnnouncePhase2Beggining();
+        }
 
         if (aGameItemGotPickedUp)
         {
@@ -99,20 +109,19 @@ public class PlayerMovement : MonoBehaviour
     private void OnTriggerEnter(Collider collision)
     {
         //if I'm colliding with a ruin and this ruin has NOT ben fixed
-        if (collision.gameObject.GetComponent<RepairableRuin>() != null )
+       if (collision.gameObject.GetComponent<RepairableRuin>() != null )
         {
-
-            if (collision.gameObject.GetComponent<RepairableRuin>().haveIBeenRepaired == false)
+            if (collision.gameObject.GetComponent<Phase2Ruins>() != null)
+            {
+                GetComponentInChildren<PriorityAssigner>().DefinePriority();
+                IAmInABrokenRuin();
+            }
+            else if (collision.gameObject.GetComponent<RepairableRuin>().haveIBeenRepaired == false)
             {
                 IAmInABrokenRuin();
             }
             else
-            {
                 IamInAFixedRuin();
-            }
-            
-            
-
         }
         else if (collision.gameObject.GetComponent<RepairingMaterialsScript>() != null)
         {
@@ -127,6 +136,10 @@ public class PlayerMovement : MonoBehaviour
             {
                 QuitGame();
             }
+        }
+        else if (collision.gameObject.GetComponent<WaterCollider>() != null)
+        {
+            audioStepsManager.SwitchToWater();
         }
 
     }
@@ -144,6 +157,10 @@ public class PlayerMovement : MonoBehaviour
         else if (collision.gameObject.GetComponent<PyramidControler>() != null)
         {
             IAmNotInThePyramid();
+        }
+        else if (collision.gameObject.GetComponent<WaterCollider>() != null)
+        {
+            audioStepsManager.SwitchToDirt();
         }
     }
 
