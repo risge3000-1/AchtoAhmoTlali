@@ -16,7 +16,6 @@ public class PyramidControler : MonoBehaviour
     public delegate void PyramidLocationActions();
     public static event PyramidLocationActions PlayerIsNearThePyramid, PlayerIsNotNearThePyramid;
     
-
     public bool[] isThisRuinInTheCorrectPlace = new bool[5];
 
     private void Awake()

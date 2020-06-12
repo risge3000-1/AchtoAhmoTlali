@@ -13,6 +13,8 @@ public class RepairableRuin : MonoBehaviour
                 amIAPhase2Ruin = false,
                 amIBeingPickedUp = false;
 
+    public bool doIHavePriority = false;
+
     public List<Item> itemsINeed = new List<Item>();
     public ItemDatabase itemDatabase;
     public InventoryUI inventoryUI;
@@ -20,6 +22,10 @@ public class RepairableRuin : MonoBehaviour
     public string historyWhenNotRepaired;
     public string historyWhenRepaired;
     public string material0, material1;
+
+
+
+    public float priorityChangeFactor = 1;
 
     Light RuinLight;
 
@@ -66,12 +72,12 @@ public class RepairableRuin : MonoBehaviour
         {
             if (RuinLight.intensity <= 6)
             {
-                RuinLight.intensity += Time.deltaTime * 4;
+                RuinLight.intensity += Time.deltaTime * 4 * priorityChangeFactor;
             }  
         }
         else
         {
-            RuinLight.intensity -= Time.deltaTime;
+            RuinLight.intensity -= Time.deltaTime * priorityChangeFactor;
         }
 
     }
@@ -162,7 +168,7 @@ public class RepairableRuin : MonoBehaviour
         //if I'm colliding with the player AND I haven't been repaired
         if (other.gameObject.GetComponent<PlayerMovement>() != null && !haveIBeenRepaired)
         {
-            if (!amIAPhase2Ruin || (amIAPhase2Ruin && !amIBeingPickedUp) )
+            if (!amIAPhase2Ruin || (amIAPhase2Ruin && !amIBeingPickedUp && doIHavePriority) )
             {
                 if (Input.GetKeyDown(KeyCode.E) && canIBeRepaired) //decides to repair it
                 {

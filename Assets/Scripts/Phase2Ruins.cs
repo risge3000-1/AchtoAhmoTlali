@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -10,12 +11,28 @@ public class Phase2Ruins : RepairableRuin
 
     public bool isPhase2Active = true;
 
+    
+
     private void Awake()
     {
         amIAPhase2Ruin = true;
         PlayerScore.Phase2HasBegun += ChangePhase2Status;
     }
 
+
+    new private void Update()
+    {
+        if (doIHavePriority)
+        {
+            priorityChangeFactor = Convert.ToSingle( Math.Sin(Time.time * 1.5) );
+        }
+        else
+        {
+            priorityChangeFactor = 1;
+        }
+
+        base.Update();
+    }
     private void OnMouseDown()
     {
         var distance = transform.position - GameObject.Find("PickingPositionObject").transform.position;

@@ -91,7 +91,10 @@ public class PlayerMovement : MonoBehaviour
             aRuinHasBeenDestroyed = false;
         }
 
-
+        if (Input.GetKeyDown(KeyCode.Q))
+        {
+            GetComponent<PlayerScore>().pyramidControler.AnnouncePhase2Beggining();
+        }
 
         if (aGameItemGotPickedUp)
         {
@@ -106,20 +109,19 @@ public class PlayerMovement : MonoBehaviour
     private void OnTriggerEnter(Collider collision)
     {
         //if I'm colliding with a ruin and this ruin has NOT ben fixed
-        if (collision.gameObject.GetComponent<RepairableRuin>() != null )
+       if (collision.gameObject.GetComponent<RepairableRuin>() != null )
         {
-
-            if (collision.gameObject.GetComponent<RepairableRuin>().haveIBeenRepaired == false)
+            if (collision.gameObject.GetComponent<Phase2Ruins>() != null)
+            {
+                GetComponentInChildren<PriorityAssigner>().DefinePriority();
+                IAmInABrokenRuin();
+            }
+            else if (collision.gameObject.GetComponent<RepairableRuin>().haveIBeenRepaired == false)
             {
                 IAmInABrokenRuin();
             }
             else
-            {
                 IamInAFixedRuin();
-            }
-            
-            
-
         }
         else if (collision.gameObject.GetComponent<RepairingMaterialsScript>() != null)
         {
