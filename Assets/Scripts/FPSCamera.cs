@@ -9,13 +9,31 @@ public class FPSCamera : MonoBehaviour
     public Camera FirstPersonCamera;
     public Light Flashlight;
     public float horizontalSpeed, verticalSpeed;
-    float horizontalMovement, verticalMovement;
+    float horizontalMovement = 0, 
+          verticalMovement = 0;
+   
     float accumulatedYRotation = 0;
+    
+    bool isPlayerOnADialogue = false;
+
+    private void Start()
+    {
+        DialogueManager.PlayerIsInADialogue += PlayerIsInADialogue;
+        DialogueManager.PlayerIsNotInADialogue += PlayerIsNotOnADialogue;
+    }
 
     void Update()
     {
-        horizontalMovement = horizontalSpeed * Input.GetAxis("Mouse X");
-        verticalMovement = verticalSpeed * Input.GetAxis("Mouse Y");
+        if (!isPlayerOnADialogue)
+        {
+            horizontalMovement = horizontalSpeed * Input.GetAxis("Mouse X");
+            verticalMovement = verticalSpeed * Input.GetAxis("Mouse Y");
+        }
+        else
+        {
+            horizontalMovement = 0;
+            verticalMovement = 0;
+        }
 
         transform.Rotate(0, horizontalMovement, 0);
 
@@ -31,4 +49,16 @@ public class FPSCamera : MonoBehaviour
         else
             accumulatedYRotation -= verticalMovement;
     }
+
+    void PlayerIsInADialogue()
+    {
+        isPlayerOnADialogue = true;
+    }
+    
+    void PlayerIsNotOnADialogue()
+    {
+        isPlayerOnADialogue = false;
+    }
+
+
 }

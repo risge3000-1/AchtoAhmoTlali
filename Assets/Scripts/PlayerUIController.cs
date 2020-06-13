@@ -36,9 +36,13 @@ public class PlayerUIController : MonoBehaviour
                   importedRuinMessageText,
                   importedPyramidMessageText;
 
+    public bool isPlayerOnADialogue = false;
+
 
     Color newOptionsTextColor,
           newMessagesTextColor;
+
+    public DialogueTrigger initalDialogue, finalDialogue;
 
     readonly float changeFactor = 2;
 
@@ -60,6 +64,9 @@ public class PlayerUIController : MonoBehaviour
 
         PlayerScore.HasInteractedWithAllRuins += DoNotShowMissingRuinsInfo;
 
+        DialogueManager.PlayerIsInADialogue += PlayerIsInADialogue;
+        DialogueManager.PlayerIsNotInADialogue += PlayerIsNotInADialogue;
+
 
         newOptionsTextColor = OptionsText.color;
         newMessagesTextColor = MessagesText.color;
@@ -67,6 +74,8 @@ public class PlayerUIController : MonoBehaviour
         //set colors's alpha to 0
         newMessagesTextColor.a = 0;
         newOptionsTextColor.a = 0;
+
+        initalDialogue.TriggerDialogue();
 
     }
 
@@ -83,10 +92,13 @@ public class PlayerUIController : MonoBehaviour
         else
             SolidifyText(false);
 
-        if (Input.GetKey(KeyCode.Escape))
+        if (Input.GetKey(KeyCode.Escape) || isPlayerOnADialogue)
             Cursor.lockState = CursorLockMode.None;
-        else
+        else if (!isPlayerOnADialogue)
+        {
             Cursor.lockState = CursorLockMode.Locked;
+        }
+            
 
         UpdateTexts();
     }
@@ -253,5 +265,15 @@ public class PlayerUIController : MonoBehaviour
 
         OptionsText.text = newOptionsText;
         MessagesText.text = newMessagesText;
+    }
+
+    void PlayerIsInADialogue()
+    {
+        isPlayerOnADialogue = true;
+    }
+
+    void PlayerIsNotInADialogue()
+    {
+        isPlayerOnADialogue = false;
     }
 }

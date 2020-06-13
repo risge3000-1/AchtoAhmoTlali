@@ -18,6 +18,8 @@ public class PlayerMovement : MonoBehaviour
                        aRuinGotRepaired = false,
                        hasInteractedWithAllRuins = false,
                        recheckedOnceCollisions = false;
+    
+    public bool isPlayerOnADialogue = false;
 
     public static string materialTypeToGive;
 
@@ -40,6 +42,8 @@ public class PlayerMovement : MonoBehaviour
     private void Start()
     {
         PlayerScore.HasInteractedWithAllRuins += PlayerHasInteractedWithallRuins;
+        DialogueManager.PlayerIsInADialogue += PlayerIsInADialogue;
+        DialogueManager.PlayerIsNotInADialogue += PlayerIsNotInADialogue;
         audioStepsManager = GetComponentInChildren<AudioStepsManager>();
     }
 
@@ -50,8 +54,14 @@ public class PlayerMovement : MonoBehaviour
         {
             velocity.y = -2f;
         }*/
-        float x = Input.GetAxis("Horizontal");
-        float z = Input.GetAxis("Vertical");
+        float x = 0;
+        float z= 0;
+
+        if (!isPlayerOnADialogue)
+        {
+            x = Input.GetAxis("Horizontal");
+            z = Input.GetAxis("Vertical");
+        }
 
         Vector3 move = transform.right * x + transform.forward * z;
         controller.Move(move*speed*Time.deltaTime);
@@ -184,5 +194,15 @@ public class PlayerMovement : MonoBehaviour
     private void PlayerHasInteractedWithallRuins()
     {
         hasInteractedWithAllRuins = true;
+    }
+
+    private void PlayerIsInADialogue()
+    {
+        isPlayerOnADialogue = true;
+    }
+
+    private void PlayerIsNotInADialogue()
+    {
+        isPlayerOnADialogue = false;
     }
 }
