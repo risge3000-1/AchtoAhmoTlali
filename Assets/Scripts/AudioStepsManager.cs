@@ -7,6 +7,9 @@ public class AudioStepsManager : MonoBehaviour
     public AudioClip WaterSteps, TerrainSteps;
     public AudioSource StepsAudioSurce;
 
+    bool alreadyDidOnce = false,
+         aKeyIsBeingPressed = false;
+
     private void Awake()
     {
          StepsAudioSurce.clip = TerrainSteps;
@@ -14,11 +17,26 @@ public class AudioStepsManager : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.D))
-            PlaySound(true);
+        /*If a movement key started or stopped getting pressed*/
+        if ((Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.D)) ||  (Input.GetKeyUp(KeyCode.W) || Input.GetKeyUp(KeyCode.A) || Input.GetKeyUp(KeyCode.S) || Input.GetKeyUp(KeyCode.D)))
+            alreadyDidOnce = false;
 
-        else if (Input.GetKeyUp(KeyCode.W) || Input.GetKeyUp(KeyCode.A) || Input.GetKeyUp(KeyCode.S) || Input.GetKeyUp(KeyCode.D))
+        /*if a key is being pressed*/
+        if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.D))
+            aKeyIsBeingPressed = true;
+        else
+            aKeyIsBeingPressed = false;        
+
+
+        if (aKeyIsBeingPressed && !alreadyDidOnce && !StepsAudioSurce.isPlaying)
+        {
+            PlaySound(true);
+            alreadyDidOnce = true;
+        }
+        else if (!aKeyIsBeingPressed)
+        {
             PlaySound(false);
+        }
     }
 
     public void SwitchToWater()
@@ -38,12 +56,9 @@ public class AudioStepsManager : MonoBehaviour
     void PlaySound(bool Activate)
     {
         if (Activate)
-        {
             StepsAudioSurce.Play();
-        }
+        
         else
-        {
-            StepsAudioSurce.Stop();
-        }
+            StepsAudioSurce.Stop(); 
     }
 }
