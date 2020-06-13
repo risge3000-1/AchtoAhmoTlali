@@ -55,7 +55,7 @@ public class PlayerScore : MonoBehaviour
             pyramidControler.AnnouncePhase2Beggining();
             Phase2HasBegun();
         }
-        gameObject.GetComponent<PlayerUIController>().AlterMissingRuinsMessage(); 
+        gameObject.GetComponent<PlayerUIController>().AlterPyramidMessageText(); 
     }
 
     public int UninteractedPhase1Ruins()

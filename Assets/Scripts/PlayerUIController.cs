@@ -5,12 +5,13 @@ using UnityEngine.UI;
 
 public class PlayerUIController : MonoBehaviour
 {
-    bool isPlayerOnARuin = false, 
-         isPlayerNearAMaterial = false, 
-         isPlayerNearThePyramid = false, 
-         showMissingRuinsInfo = true, 
-         isPlayerOnAFixedRuin = false, 
-         haveIImportedTheRuinStory = false;
+    bool isPlayerOnARuin = false,
+         isPlayerNearAMaterial = false,
+         isPlayerNearThePyramid = false,
+         showMissingRuinsInfo = true,
+         isPlayerOnAFixedRuin = false,
+         haveIImportedTheRuinStory = false,
+         isPlayerOnACollision = false;
 
     public enum WhatInfoHasPriority
     {
@@ -22,28 +23,22 @@ public class PlayerUIController : MonoBehaviour
 
     }
 
-    public Text  RuinOptionsText;
-    public Image RuinOptionsBackground;
-    public Text  RuinStoryText;
-    public Image RuinStoryBackground;
-    public Text  GameItemOptionsText;
-    public Image GameItemOptionsBackground;
-    public Text  MissingRuinsText;
-    public Image MissingRuinsBackground;
+    public Text OptionsText,
+                MessagesText;
 
-    public string infoAmoutMissingRuins;
+    public string newOptionsText,
+                  newMessagesText;
 
-    Color newRuinOptionsBackgroundTint;
-    Color newRuinOptionsTextTint;
+    public string importedMaterialOptionsText,
+                  importedRuinOptionsText,
+                  importedPyramidOptionsText,
+                  importedMaterialMessageText,
+                  importedRuinMessageText,
+                  importedPyramidMessageText;
 
-    Color newRuinStoryBackgroundTint;
-    Color newRuinStoryTextTint;
 
-    Color newGameItemOptionsBackgroundTint;
-    Color newGameItemOptionsTextTint;
-
-    Color newMissingRuinsTextTint;
-    Color newMissingRuinsBackgroundTint;
+    Color newOptionsTextColor,
+          newMessagesTextColor;
 
     readonly float changeFactor = 2;
 
@@ -60,37 +55,18 @@ public class PlayerUIController : MonoBehaviour
         PlayerMovement.IAmNearThePyramid += BeingCloseToPyramid;
         PlayerMovement.IAmNotInThePyramid += SeparatingFromPyramid;
 
-        PlayerMovement.IDestroyedARuin += AlterMissingRuinsMessage;
-        PlayerMovement.IrepairedARuin += AlterMissingRuinsMessage;
+        PlayerMovement.IDestroyedARuin += AlterPyramidMessageText;
+        PlayerMovement.IrepairedARuin += AlterPyramidMessageText;
 
         PlayerScore.HasInteractedWithAllRuins += DoNotShowMissingRuinsInfo;
 
 
-        //copy current color values to avoid discrepancies
-        newRuinOptionsBackgroundTint = RuinOptionsBackground.color;
-        newRuinOptionsTextTint = RuinOptionsText.color;
-
-        newGameItemOptionsBackgroundTint = GameItemOptionsBackground.color;
-        newGameItemOptionsTextTint = GameItemOptionsText.color;
-
-        newMissingRuinsBackgroundTint = MissingRuinsBackground.color;
-        newMissingRuinsTextTint = MissingRuinsText.color;
-
-        newRuinStoryBackgroundTint = RuinStoryBackground.color;
-        newRuinStoryTextTint = RuinStoryText.color;
+        newOptionsTextColor = OptionsText.color;
+        newMessagesTextColor = MessagesText.color;
 
         //set colors's alpha to 0
-        newRuinOptionsBackgroundTint.a = 0;
-        newRuinOptionsTextTint.a = 0;
-
-        newGameItemOptionsBackgroundTint.a = 0;
-        newGameItemOptionsTextTint.a = 0;
-
-        newMissingRuinsTextTint.a = 0;
-        newMissingRuinsBackgroundTint.a = 0;
-
-        newRuinStoryBackgroundTint.a = 0;
-        newRuinStoryTextTint.a = 0;
+        newMessagesTextColor.a = 0;
+        newOptionsTextColor.a = 0;
 
     }
 
@@ -99,105 +75,80 @@ public class PlayerUIController : MonoBehaviour
         //This is Only to fix the bug for when the payer interacts with te first ruin.
 
         //AlterMissingRuinsMessage();
-        
-        if (isPlayerNearAMaterial && !isPlayerOnARuin)
+
+        if (isPlayerOnACollision)
         {
-            ColorClearnessManager(WhatInfoHasPriority.itemOptions);
-        }
-        else if (isPlayerNearThePyramid)
-        {
-            ColorClearnessManager(WhatInfoHasPriority.missingRuins);
-        }
-        else if (isPlayerOnAFixedRuin)
-        {
-            ColorClearnessManager(WhatInfoHasPriority.ruinStory);
-        }
-        else if (isPlayerOnARuin)
-        {
-            ColorClearnessManager(WhatInfoHasPriority.ruinOptions);
+            SolidifyText(true);
         }
         else
-        {
-            ColorClearnessManager(WhatInfoHasPriority.nothing);
-        }
+            SolidifyText(false);
 
         if (Input.GetKey(KeyCode.Escape))
             Cursor.lockState = CursorLockMode.None;
         else
             Cursor.lockState = CursorLockMode.Locked;
 
-
+        UpdateTexts();
     }
 
-    private void OnTriggerStay(Collider collider)
+    private void OnTriggerStay(Collider other)
     {
-        if (collider.gameObject.GetComponent<RepairableRuin>() != null && !haveIImportedTheRuinStory)
+        isPlayerOnACollision = true;
+
+        if (other.GetComponent<RepairableRuin>() != null)
         {
-            RuinStoryText.text = collider.gameObject.GetComponent<RepairableRuin>().ExportStoryText();
-            haveIImportedTheRuinStory = true;
+            importedRuinMessageText = other.GetComponent<RepairableRuin>().ExportStoryText();
+            importedRuinOptionsText = other.GetComponent<RepairableRuin>().optionsMessageToExport;
         }
+        else if (other.GetComponent<RepairingMaterialsScript>() != null)
+        {
+            importedMaterialMessageText = "";
+            importedMaterialOptionsText = other.GetComponent<RepairingMaterialsScript>().optionsMessageToExport;
+        }
+        else if (other.GetComponent<PyramidControler>() != null)
+        {
+            importedPyramidOptionsText = "Maybe interacting with the ruins will open it...";
+        }
+
+        UpdateTexts();
     }
 
-    void ColorClearnessManager(WhatInfoHasPriority infoThatHasToBePrioritized)
+
+    private void OnTriggerExit(Collider other)
+    {
+        isPlayerOnACollision = false;
+        UpdateTexts();
+    }
+
+    void SolidifyText(bool solidify)
     {
         float newAlphaValueToAssign = Time.deltaTime * changeFactor;
 
-        newGameItemOptionsBackgroundTint.a -= newAlphaValueToAssign;
-        newGameItemOptionsTextTint.a -= newAlphaValueToAssign;
-
-        newRuinOptionsBackgroundTint.a -= newAlphaValueToAssign;
-        newRuinOptionsTextTint.a -= newAlphaValueToAssign;
-
-        newRuinStoryBackgroundTint.a -= newAlphaValueToAssign;
-        newRuinStoryTextTint.a -= newAlphaValueToAssign;
-
-        newMissingRuinsTextTint.a -= newAlphaValueToAssign;
-        newMissingRuinsBackgroundTint.a -= newAlphaValueToAssign;
-
-        switch (infoThatHasToBePrioritized)
+        if (solidify)
         {
-            case WhatInfoHasPriority.itemOptions:
-                newGameItemOptionsBackgroundTint.a += newAlphaValueToAssign * 2;
-                newGameItemOptionsTextTint.a += newAlphaValueToAssign * 2;
-                break;
+            if (newOptionsTextColor.a < 0)
+            {
+                newOptionsTextColor.a = 0;
+                newMessagesTextColor.a = 0;
+            }
             
-            case WhatInfoHasPriority.ruinOptions:
-                newRuinOptionsBackgroundTint.a += newAlphaValueToAssign * 2;
-                newRuinOptionsTextTint.a += newAlphaValueToAssign * 2;
+            newOptionsTextColor.a += newAlphaValueToAssign;
+            newMessagesTextColor.a += newAlphaValueToAssign;
+        }
+        else
+        {
+            if (newOptionsTextColor.a > 1)
+            {
+                newOptionsTextColor.a = 1;
+                newMessagesTextColor.a = 1;
+            }
 
-                newRuinStoryBackgroundTint.a += newAlphaValueToAssign * 2;
-                newRuinStoryTextTint.a += newAlphaValueToAssign * 2;
-                break;
-            
-            case WhatInfoHasPriority.missingRuins:
-                if (showMissingRuinsInfo)
-                {
-                    newMissingRuinsTextTint.a += newAlphaValueToAssign * 2;
-                    newMissingRuinsBackgroundTint.a += newAlphaValueToAssign * 2;
-                }
-                break;
-            case WhatInfoHasPriority.ruinStory:
-                newRuinStoryBackgroundTint.a += newAlphaValueToAssign * 2;
-                newRuinStoryTextTint.a += newAlphaValueToAssign * 2;
-                break;
-            case WhatInfoHasPriority.nothing:
-            default:
-                break;
+            newOptionsTextColor.a -= newAlphaValueToAssign;
+            newMessagesTextColor.a -= newAlphaValueToAssign;
         }
 
-        RuinOptionsBackground.color = newRuinOptionsBackgroundTint;
-        RuinOptionsText.color = newRuinOptionsTextTint;
-
-        RuinStoryBackground.color = newRuinStoryBackgroundTint;
-        RuinStoryText.color = newRuinStoryTextTint;
-
-        GameItemOptionsBackground.color = newGameItemOptionsBackgroundTint;
-        GameItemOptionsText.color = newGameItemOptionsTextTint;
-
-        MissingRuinsText.color = newMissingRuinsTextTint;
-        MissingRuinsBackground.color = newMissingRuinsBackgroundTint;
-
-
+        OptionsText.color = newOptionsTextColor;
+        MessagesText.color = newMessagesTextColor;
 
     }
 
@@ -206,13 +157,6 @@ public class PlayerUIController : MonoBehaviour
         isPlayerOnARuin = true;
         haveIImportedTheRuinStory = false;
 
-        if (newRuinOptionsBackgroundTint.a < 0)
-        {
-            newRuinOptionsBackgroundTint.a = 0;
-            newRuinOptionsTextTint.a = 0;
-            newRuinStoryBackgroundTint.a = 0;
-            newRuinStoryTextTint.a = 0;
-        }
     }
 
     void FixedRuinEntering()
@@ -220,66 +164,32 @@ public class PlayerUIController : MonoBehaviour
         isPlayerOnAFixedRuin = true;
         haveIImportedTheRuinStory = false;
 
-        if (newRuinStoryBackgroundTint.a < 0)
-        {
-            newRuinStoryBackgroundTint.a = 0;
-            newRuinStoryTextTint.a = 0;
-        }
     }
 
     void RuinExiting()
     {
         isPlayerOnARuin = false;
         isPlayerOnAFixedRuin = false;
-        if (newRuinOptionsBackgroundTint.a > 1)
-        {
-            newRuinOptionsBackgroundTint.a = 1;
-            newRuinOptionsTextTint.a = 1;
-            newRuinStoryBackgroundTint.a = 1;
-            newRuinStoryTextTint.a = 1;
-        }
     }
 
     void BeingNearAMaterial()
     {
         isPlayerNearAMaterial = true;
-        if (newGameItemOptionsBackgroundTint.a < 0)
-        {
-            newGameItemOptionsBackgroundTint.a = 0;
-            newGameItemOptionsTextTint.a = 0;
-        }
     }
 
     void NotBeingNearAMaterial()
     {
         isPlayerNearAMaterial = false;
-        if (newGameItemOptionsBackgroundTint.a > 1)
-        {
-            newGameItemOptionsBackgroundTint.a = 1;
-            newGameItemOptionsTextTint.a = 1;
-        }
     }
 
     void BeingCloseToPyramid()
     {
         isPlayerNearThePyramid = true;
-        if (newMissingRuinsBackgroundTint.a < 0)
-        {
-            newMissingRuinsBackgroundTint.a = 0;
-            newMissingRuinsTextTint.a = 0;
-        }
     }
 
     void SeparatingFromPyramid()
     {
         isPlayerNearThePyramid = false;
-        if (newMissingRuinsBackgroundTint.a > 1)
-        {
-            newMissingRuinsBackgroundTint.a = 1;
-            newMissingRuinsTextTint.a = 1;
-            newRuinStoryBackgroundTint.a = 1;
-            newRuinStoryTextTint.a = 1;
-        }
     }
 
     void DoNotShowMissingRuinsInfo()
@@ -287,24 +197,61 @@ public class PlayerUIController : MonoBehaviour
         showMissingRuinsInfo = false;
     }
 
-    public void AlterMissingRuinsMessage()
+    public void AlterPyramidMessageText()
     {
         int uninteractedPhase1Ruins = GetComponent<PlayerScore>().UninteractedPhase1Ruins();
         int missingPhase2Ruins = 5 - GetComponent<PlayerScore>().pyramidControler.MissingPhase2Ruins();
 
-        Debug.Log("Phase2 active is" + GetComponent<PlayerScore>().pyramidControler.hasPhase2Begun);
-
         if (GetComponent<PlayerScore>().pyramidControler.hasUserinteractedWithAllRuins)
         {
-            MissingRuinsText.text = "Thank you...";
+            importedPyramidMessageText = "Thank you...";
         }
         else if (GetComponent<PlayerScore>().pyramidControler.hasPhase2Begun)
         {
-            MissingRuinsText.text = "You're missing " + missingPhase2Ruins + " ruins to be correctly placed..";
+            importedPyramidMessageText = "You're missing " + missingPhase2Ruins + " ruins to be correctly placed..";
         }
         else
         {
-            MissingRuinsText.text = "You're missing " + uninteractedPhase1Ruins + " ruins to ether repair or destroy and something else...";
+            importedPyramidMessageText = "You're missing " + uninteractedPhase1Ruins + " ruins to ether repair or destroy and something else...";
         }
+    }
+
+    public string MessagesTextPrioritizer()
+    {
+        if (isPlayerOnARuin || isPlayerOnAFixedRuin)
+            return importedRuinMessageText;
+        
+        else if (isPlayerNearAMaterial)
+            return importedMaterialMessageText;
+        
+        else if (isPlayerNearThePyramid)
+            return importedPyramidMessageText;
+       
+        else
+            return newMessagesText;
+    }
+
+    public string OptionsTextsPrioritizer()
+    {
+        if (isPlayerOnARuin || isPlayerOnAFixedRuin)
+            return importedRuinOptionsText;
+
+        else if (isPlayerNearAMaterial)
+            return importedMaterialOptionsText;
+
+        else if (isPlayerNearThePyramid)
+            return importedPyramidOptionsText;
+
+        else
+            return newOptionsText;
+    }
+
+    void UpdateTexts()
+    {
+        newOptionsText = OptionsTextsPrioritizer();
+        newMessagesText = MessagesTextPrioritizer();
+
+        OptionsText.text = newOptionsText;
+        MessagesText.text = newMessagesText;
     }
 }

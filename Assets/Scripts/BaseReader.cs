@@ -6,10 +6,12 @@ public class BaseReader : MonoBehaviour
 {
     public int correctRuinID;
     public PyramidControler pyramidControler;
-    public bool isPhase2Active = false;
+    public bool isPhase2Active = false,
+                DoIHaveTheCorrectRuin = false;
+
     Color newColorToassign;
 
-    private void OnTriggerEnter(Collider other)
+    private void OnTriggerStay(Collider other)
     {
        
        //if the ruin has the ID I want AND has been repaired,
@@ -17,35 +19,57 @@ public class BaseReader : MonoBehaviour
         {
             newColorToassign = Color.green;
 
-            pyramidControler.isThisRuinInTheCorrectPlace[correctRuinID] = true;
+            DoIHaveTheCorrectRuin = true;
+
+            pyramidControler.isThisRuinInTheCorrectPlaceAndRepaired[correctRuinID] = true;
             pyramidControler.CheckPhase2Puzzle();  
         }
-        else if (other.gameObject.GetComponent<Phase2Ruins>().ruinId != correctRuinID)
+        //if the ruin has tho correct Id BUT has not been repaired
+        else if (other.gameObject.GetComponent<Phase2Ruins>().ruinId == correctRuinID && !other.GetComponent<Phase2Ruins>().haveIBeenRepaired)
+        {
+            newColorToassign = Color.yellow;
+
+            pyramidControler.isThisRuinInTheCorrectPlaceAndRepaired[correctRuinID] = false;
+
+            DoIHaveTheCorrectRuin = true;
+        }
+        //if I detect another ruin while I have the correct one already
+        else if (other.gameObject.GetComponent<Phase2Ruins>().ruinId != correctRuinID && !DoIHaveTheCorrectRuin)
         {
             newColorToassign = Color.red;
             
-            pyramidControler.isThisRuinInTheCorrectPlace[correctRuinID] = false;
+            pyramidControler.isThisRuinInTheCorrectPlaceAndRepaired[correctRuinID] = false;
         }
 
+        //BUG FIX
         if (!isPhase2Active)
             IntensityDeactivator(true);
-
-        Debug.Log("a as" + newColorToassign.a + " and phase2Active as " + isPhase2Active);
 
         GetComponentInChildren<Light>().color = newColorToassign;
     }
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.gameObject.GetComponent<Phase2Ruins>() != null)
+        if (other.GetComponent<Phase2Ruins>() != null)
         {
-            GetComponentInChildren<Light>().color = Color.yellow;
-            
-            if (!isPhase2Active)
-                IntensityDeactivator(true);
-            
-            pyramidControler.isThisRuinInTheCorrectPlace[correctRuinID] = false;
+            if (other.GetComponent<Phase2Ruins>().ruinId == correctRuinID)
+            {
+                GetComponentInChildren<Light>().color = Color.blue;
+
+                pyramidControler.isThisRuinInTheCorrectPlaceAndRepaired[correctRuinID] = false;
+
+                DoIHaveTheCorrectRuin = false;
+            }
+            else if (other.GetComponent<Phase2Ruins>().ruinId != correctRuinID && !DoIHaveTheCorrectRuin)
+            {
+                GetComponentInChildren<Light>().color = Color.blue;
+            }
+           
         }
+
+        //BUG FIX
+        if (!isPhase2Active)
+            IntensityDeactivator(true);
     }
 
     public void ChangesForPhase2()

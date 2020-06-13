@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel.Design;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -11,9 +12,9 @@ public class RepairableRuin : MonoBehaviour
                 isPlayerNearMe = false,
                 canIBeRepaired = false,
                 amIAPhase2Ruin = false,
-                amIBeingPickedUp = false;
-
-    public bool doIHavePriority = false;
+                amIBeingPickedUp = false,
+                doIHavePriority = false,
+                hasPhase2Begun = false;
 
     public List<Item> itemsINeed = new List<Item>();
     public ItemDatabase itemDatabase;
@@ -22,6 +23,9 @@ public class RepairableRuin : MonoBehaviour
     public string historyWhenNotRepaired;
     public string historyWhenRepaired;
     public string material0, material1;
+
+    public string optionsMessageToExport = "",
+                  destroyOptionString = "";
 
 
 
@@ -72,93 +76,84 @@ public class RepairableRuin : MonoBehaviour
         {
             if (RuinLight.intensity <= 6)
             {
-                RuinLight.intensity += Time.deltaTime * 4 * priorityChangeFactor;
-            }  
+                RuinLight.intensity += ( Time.deltaTime * 4 ) ;
+            }
+            RuinLight.intensity += priorityChangeFactor / 10;
         }
         else
         {
-            RuinLight.intensity -= Time.deltaTime * priorityChangeFactor;
+            RuinLight.intensity -= Time.deltaTime ;
         }
 
     }
 
-    private void OnTriggerEnter(Collider other)
+    private void OnTriggerEnter(Collider other) /*HERE IS THE OPTIONS ALTERATION SCRIPT*/
     {
         bool isItem0Aviable = false, isItem1Aviable = false ;
-
-        string messageToExport = "";
         
         if (other.gameObject.GetComponent<PlayerMovement>() != null)
         {
             isPlayerNearMe = true;
             if (RuinLight.intensity < 0)
-            {
                 RuinLight.intensity = 0;
-            }
 
-            
+            if (!amIAPhase2Ruin) destroyOptionString = "F - Destroy | ";
+            else destroyOptionString = ""; 
 
-            for (int i = 0; i < inventoryUI.ItemsUI.Count; i++)
+            /*(if I havent been repaired AND ( (I'm not a phase2ruin) OR (I am a Phase2Ruin AND phase2 is active) )*/
+            if (!haveIBeenRepaired && ( (!amIAPhase2Ruin) || (amIAPhase2Ruin && hasPhase2Begun) )/*<- End of &&*/ )/*<- End of IF*/
             {
-                //if the item in the inventory slot of the player is equal to one of the required materials of the ruin, increase counter
-                if (inventoryUI.ItemsUI[i].item == itemsINeed[0] && !isItem0Aviable)
+                for (int i = 0; i < inventoryUI.ItemsUI.Count; i++)
                 {
-                    isItem0Aviable = true;
+                    //if the item in the inventory slot of the player is equal to one of the required materials of the ruin, increase counter
+                    if (inventoryUI.ItemsUI[i].item == itemsINeed[0] && !isItem0Aviable)
+                        isItem0Aviable = true;
+
+                    else if (inventoryUI.ItemsUI[i].item == itemsINeed[1] && !isItem1Aviable)
+                        isItem1Aviable = true;
+
                 }
-                else if (inventoryUI.ItemsUI[i].item == itemsINeed[1] && !isItem1Aviable)
+
+                if (isItem0Aviable == true && isItem1Aviable == true)
                 {
-                    isItem1Aviable = true;
-                }
-            }
+                    canIBeRepaired = true;
 
-            if (isItem0Aviable == true && isItem1Aviable == true)
-            {
-                canIBeRepaired = true;
+                    if (itemsINeed[0].resourceName == itemsINeed[1].resourceName)
+                        optionsMessageToExport = destroyOptionString + "E - Repair with 2 " + itemsINeed[0].resourceName;
+                    else
+                        optionsMessageToExport = destroyOptionString + "E - Repair with " + itemsINeed[0].resourceName + " and " + itemsINeed[1].resourceName;
 
-               
-
-                if (itemsINeed[0].resourceName ==  itemsINeed[1].resourceName)
-                {
-                    messageToExport = "F - Destroy | E - Repair with 2 " + itemsINeed[0].resourceName ;
                 }
                 else
                 {
-                    messageToExport = "F - Destroy | E - Repair with " + itemsINeed[0].resourceName + " and " + itemsINeed[1].resourceName;
-                }
-            }    
-            else
-            {
-                canIBeRepaired = false;
+                    canIBeRepaired = false;
 
-                if (isItem0Aviable == isItem1Aviable)
-                {
-                    if (itemsINeed[0].resourceName == itemsINeed[1].resourceName)
+                    if (isItem0Aviable == isItem1Aviable)
                     {
-                        messageToExport = "F - Destroy | You're missing 2 " + itemsINeed[0].resourceName + " items";
+                        if (itemsINeed[0].resourceName == itemsINeed[1].resourceName)
+                            optionsMessageToExport = destroyOptionString + "You're missing 2 " + itemsINeed[0].resourceName + " items";
+
+                        else
+                            optionsMessageToExport = destroyOptionString + "You're missing " + itemsINeed[0].resourceName + " and " + itemsINeed[1].resourceName;
                     }
                     else
                     {
-                        messageToExport = "F - Destroy | You're missing " + itemsINeed[0].resourceName + " and " + itemsINeed[1].resourceName;
-                    }
-                }
-                else
-                {
-                    if (!isItem0Aviable)
-                    {
-                        messageToExport = "F - Destroy | You're missing " + itemsINeed[0].resourceName;
-                    }
-                    else if (!isItem1Aviable)
-                    {
-                        messageToExport = "F - Destroy | You're missing " + itemsINeed[1].resourceName;
+                        if (!isItem0Aviable)
+                            optionsMessageToExport = destroyOptionString + "You're missing " + itemsINeed[0].resourceName;
+
+                        else if (!isItem1Aviable)
+                            optionsMessageToExport = destroyOptionString + "You're missing " + itemsINeed[1].resourceName;
+
                     }
                 }
             }
-
-            other.gameObject.GetComponent<PlayerUIController>().RuinOptionsText.text = messageToExport;
-
+            
+            else if (amIAPhase2Ruin && !hasPhase2Begun)
+                optionsMessageToExport = " \"Interact the other ruins first...\"\nThat's what I read";
+            
+            else if (haveIBeenRepaired)
+                optionsMessageToExport = "I think it says \"Thanks for fixing me\"... Besides the other thing";
         }
-
-
     }
 
     private void OnTriggerStay(Collider other)
@@ -175,10 +170,13 @@ public class RepairableRuin : MonoBehaviour
                     haveIBeenRepaired = true;
                     hasNotChangedColorsYet = true;
                     PlayerMovement.aRuinGotRepaired = true;
-                    other.gameObject.GetComponent<Inventory>().RemoveItem(itemType: itemsINeed[0].resourceName);
-                    other.gameObject.GetComponent<Inventory>().RemoveItem(itemType: itemsINeed[1].resourceName);
+                    other.GetComponent<Inventory>().RemoveItem(itemType: itemsINeed[0].resourceName);
+                    other.GetComponent<Inventory>().RemoveItem(itemType: itemsINeed[1].resourceName);
+
+                    OnTriggerEnter(other);
+
                 }
-                else if (Input.GetKeyDown(KeyCode.F)) //decides to destroy it
+                else if (Input.GetKeyDown(KeyCode.F) && !amIAPhase2Ruin) //decides to destroy it AND I'm not a Phase 2 ruin
                 {
                     PlayerMovement.aRuinHasBeenDestroyed = true;
                     gameObject.SetActive(false);

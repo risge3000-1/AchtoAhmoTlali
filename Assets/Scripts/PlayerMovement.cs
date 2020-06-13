@@ -13,10 +13,11 @@ public class PlayerMovement : MonoBehaviour
     public float jumpHeight = 3f;
     public Light Flashlight;
 
-    public static bool aGameItemGotPickedUp = false, 
-                       aRuinHasBeenDestroyed = false, 
-                       aRuinGotRepaired = false, 
-                       hasInteractedWithAllRuins = false;
+    public static bool aGameItemGotPickedUp = false,
+                       aRuinHasBeenDestroyed = false,
+                       aRuinGotRepaired = false,
+                       hasInteractedWithAllRuins = false,
+                       recheckedOnceCollisions = false;
 
     public static string materialTypeToGive;
 
@@ -131,7 +132,7 @@ public class PlayerMovement : MonoBehaviour
         {            
             IAmNearThePyramid();
 
-            GetComponent<PlayerUIController>().AlterMissingRuinsMessage();
+            GetComponent<PlayerUIController>().AlterPyramidMessageText();
             if (hasInteractedWithAllRuins)
             {
                 QuitGame();
@@ -142,6 +143,16 @@ public class PlayerMovement : MonoBehaviour
             audioStepsManager.SwitchToWater();
         }
 
+    }
+
+    private void OnTriggerStay(Collider other)
+    {
+        if (!recheckedOnceCollisions && other.GetComponent<Phase2Ruins>())
+        {
+            GetComponentInChildren<PriorityAssigner>().DefinePriority();
+
+            recheckedOnceCollisions = true;
+        }
     }
 
     private void OnTriggerExit(Collider collision)

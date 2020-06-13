@@ -16,7 +16,7 @@ public class PyramidControler : MonoBehaviour
     public delegate void PyramidLocationActions();
     public static event PyramidLocationActions PlayerIsNearThePyramid, PlayerIsNotNearThePyramid;
     
-    public bool[] isThisRuinInTheCorrectPlace = new bool[5];
+    public bool[] isThisRuinInTheCorrectPlaceAndRepaired = new bool[5];
 
     private void Awake()
     {
@@ -89,7 +89,7 @@ public class PyramidControler : MonoBehaviour
 
         for (int i = 0; i < 5; i++)
         {
-            if (isThisRuinInTheCorrectPlace[i])
+            if (isThisRuinInTheCorrectPlaceAndRepaired[i])
             {
                 ruinsThatHaveBeenCorrectlyPlaced++;
             }

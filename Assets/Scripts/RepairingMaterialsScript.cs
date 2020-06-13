@@ -8,7 +8,8 @@ public class RepairingMaterialsScript : MonoBehaviour
     bool isPlayerOnARuin = false;
     public bool wasIGeneratedFromARuin = false;
     bool doIHavePriority = true;
-    public string materialName;
+    public string materialName,
+                  optionsMessageToExport;
     public InventoryUI inventoryUI;
     
     private void Start()
@@ -22,15 +23,10 @@ public class RepairingMaterialsScript : MonoBehaviour
         if (other.gameObject.GetComponent<PlayerMovement>() )
         {
             if (inventoryUI.ItemsUI.FindIndex(i => i.item == null) == -1)
-            {
-                other.gameObject.GetComponent<PlayerUIController>().GameItemOptionsText.text = "Inventory full";
-            }
+                optionsMessageToExport = "Inventory full";
+            
             else
-            {
-                other.gameObject.GetComponent<PlayerUIController>().GameItemOptionsText.text = ("E - Pick up " + materialName);
-            }
-            
-            
+                optionsMessageToExport  = "E - Pick up " + materialName; 
         }
     }
 
@@ -39,15 +35,12 @@ public class RepairingMaterialsScript : MonoBehaviour
         if (other.gameObject.GetComponent<PlayerMovement>() != null && !isPlayerOnARuin && doIHavePriority)
         {
             if (Input.GetKeyDown(KeyCode.E) && inventoryUI.ItemsUI.FindIndex(i => i.item == null) != -1)
-            {
                 AddToInventory();
-            }
         }
 
         if (other.gameObject.GetComponent<RepairingMaterialsScript>() != null && wasIGeneratedFromARuin)
-        {
             doIHavePriority = false;
-        }
+        
         else
             doIHavePriority = true;
     }

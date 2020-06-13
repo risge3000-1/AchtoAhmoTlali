@@ -8,11 +8,7 @@ public class Phase2Ruins : RepairableRuin
     public int ruinId;
 
     public Transform DestinyPoint;
-
-    public bool isPhase2Active = true;
-
     
-
     private void Awake()
     {
         amIAPhase2Ruin = true;
@@ -31,15 +27,18 @@ public class Phase2Ruins : RepairableRuin
             priorityChangeFactor = 1;
         }
 
+        if (Input.GetKeyDown(KeyCode.Q))
+        {
+            hasPhase2Begun = true;
+        }
+
         base.Update();
     }
     private void OnMouseDown()
     {
         var distance = transform.position - GameObject.Find("PickingPositionObject").transform.position;
-
-        Debug.Log("I read the magnitude as " + distance.magnitude);
-
-        if (distance.magnitude <= 6 && isPhase2Active)
+        
+        if (distance.magnitude <= 6 && hasPhase2Begun)
         {
             amIBeingPickedUp = true;
             
@@ -66,6 +65,6 @@ public class Phase2Ruins : RepairableRuin
 
     private void ChangePhase2Status()
     {
-        isPhase2Active = true;
+        hasPhase2Begun = true;
     }
 }
