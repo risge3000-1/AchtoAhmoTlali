@@ -68,7 +68,7 @@ public class DialogueManager : MonoBehaviour
         StartCoroutine(TypeSentence(sentence));
     }
 
-    void EndDialogue()
+    public void EndDialogue()
     {
         PlayerIsNotInADialogue();
         
