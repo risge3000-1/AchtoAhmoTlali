@@ -8,4 +8,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Ivan's Scene.unity
     guid: 8c677fe2b728cde4f8e0f67c363580dc
+  - enabled: 1
+    path: Assets/Scenes/WelcomeScreen.unity
+    guid: 568295a52c96b84448f5cde0c53ec1ef
   m_configObjects: {}
