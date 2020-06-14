@@ -1,1 +1,0 @@
-El MAC.app se generó al momento de hacer el ejecutable, no se va a mover por seguridad

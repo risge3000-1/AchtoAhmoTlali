@@ -182,6 +182,7 @@ public class PlayerUIController : MonoBehaviour
     {
         isPlayerOnARuin = false;
         isPlayerOnAFixedRuin = false;
+        isPlayerOnACollision = false;
     }
 
     void BeingNearAMaterial()
@@ -192,6 +193,7 @@ public class PlayerUIController : MonoBehaviour
     void NotBeingNearAMaterial()
     {
         isPlayerNearAMaterial = false;
+        isPlayerOnACollision = false;
     }
 
     void BeingCloseToPyramid()
@@ -202,6 +204,7 @@ public class PlayerUIController : MonoBehaviour
     void SeparatingFromPyramid()
     {
         isPlayerNearThePyramid = false;
+        isPlayerOnACollision = false;
     }
 
     void DoNotShowMissingRuinsInfo()

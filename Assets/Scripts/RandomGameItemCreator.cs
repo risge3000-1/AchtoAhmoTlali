@@ -18,7 +18,7 @@ public class RandomGameItemCreator : MonoBehaviour
 
     static public void GenerateRandomMaterial(float xPosition, float yPosition, float zPosition)
     {
-        int randomFactor = 0 /*Random.Range(0,3)*/;
+        int randomFactor = Random.Range(0,3);
         GameObject materialToUse;
 
         switch (randomFactor)
