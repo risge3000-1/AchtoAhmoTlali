@@ -27,11 +27,6 @@ public class Phase2Ruins : RepairableRuin
             priorityChangeFactor = 1;
         }
 
-        if (Input.GetKeyDown(KeyCode.Q))
-        {
-            hasPhase2Begun = true;
-        }
-
         base.Update();
     }
     private void OnMouseDown()

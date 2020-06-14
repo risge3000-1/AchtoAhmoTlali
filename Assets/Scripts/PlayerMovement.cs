@@ -102,11 +102,6 @@ public class PlayerMovement : MonoBehaviour
             aRuinHasBeenDestroyed = false;
         }
 
-        if (Input.GetKeyDown(KeyCode.Q))
-        {
-            GetComponent<PlayerScore>().pyramidControler.AnnouncePhase2Beggining();
-        }
-
         if (aGameItemGotPickedUp)
         {
             IAmNotNearAMaterial();

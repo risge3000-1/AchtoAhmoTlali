@@ -12,17 +12,6 @@ public class Inventory : MonoBehaviour
 
     private void Update()
     {
-        if (!doOnce)
-        {
-            
-            doOnce = true;
-
-            for (int i = 0; i < 42; i++)
-            {
-                GiveItem(0);
-            }
-        }
-
 
     }
 

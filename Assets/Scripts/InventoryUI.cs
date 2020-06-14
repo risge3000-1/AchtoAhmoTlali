@@ -8,7 +8,7 @@ public class InventoryUI : MonoBehaviour
     public List<ItemUI> ItemsUI = new List<ItemUI>();
     public GameObject slotPrefab;
     public Transform slotPanel;
-    readonly int numberOfSlots = 42;
+    readonly int numberOfSlots = 10;
 
     private void Awake()
     {
