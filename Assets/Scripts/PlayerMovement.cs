@@ -90,12 +90,8 @@ public class PlayerMovement : MonoBehaviour
             }
             else if (aRuinHasBeenDestroyed)
             {
-                Debug.Log("I read I am destroying a ruin and I'm announcing it");
 
                 IDestroyedARuin();
-
-                Debug.Log("x as " + transform.position.x + " y as " + transform.position.y + " z as " + transform.position.z);
-                RandomGameItemCreator.GenerateRandomMaterial(transform.position.x, transform.position.y, transform.position.z);
             }
 
             aRuinGotRepaired = false;

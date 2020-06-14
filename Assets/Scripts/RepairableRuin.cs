@@ -62,8 +62,10 @@ public class RepairableRuin : MonoBehaviour
         {
             if (haveIBeenRepaired)
                 newColorOfLight = Color.red;
+            
             else if (amIBeingPickedUp)
                 newColorOfLight = Color.yellow;
+           
             else
                 newColorOfLight = Color.green;
 
@@ -75,15 +77,14 @@ public class RepairableRuin : MonoBehaviour
         if (isPlayerNearMe)
         {
             if (RuinLight.intensity <= 6)
-            {
                 RuinLight.intensity += ( Time.deltaTime * 4 ) ;
-            }
-            RuinLight.intensity += priorityChangeFactor / 10;
+            
+            if (amIAPhase2Ruin) 
+                RuinLight.intensity += priorityChangeFactor / 10;
         }
         else
-        {
             RuinLight.intensity -= Time.deltaTime ;
-        }
+        
 
     }
 
@@ -180,6 +181,8 @@ public class RepairableRuin : MonoBehaviour
                 {
                     PlayerMovement.aRuinHasBeenDestroyed = true;
                     gameObject.SetActive(false);
+
+                    RandomGameItemCreator.GenerateRandomMaterial(transform.position.x, transform.position.y, transform.position.z);
                 }
             }
             else if (amIBeingPickedUp)
