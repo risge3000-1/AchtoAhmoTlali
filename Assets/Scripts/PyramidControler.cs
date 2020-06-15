@@ -13,7 +13,7 @@ public class PyramidControler : MonoBehaviour
                 hasUserPutAllRuinsInTheCorrectPlace = false,
                 hasPhase2Begun = false;
 
-    public DialogueManager goodEnding, badEnding;adrugada...
+    public DialogueManager goodEnding, badEnding;
 
     public delegate void PyramidLocationActions();
     public static event PyramidLocationActions PlayerIsNearThePyramid, PlayerIsNotNearThePyramid;

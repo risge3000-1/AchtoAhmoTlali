@@ -12028,7 +12028,7 @@ PrefabInstance:
     - target: {fileID: 1650223247978557478, guid: e7bef2d0b95c988409393b40cda82f2c,
         type: 3}
       propertyPath: m_RootOrder
-      value: 19
+      value: 17
       objectReference: {fileID: 0}
     - target: {fileID: 1650223247978557478, guid: e7bef2d0b95c988409393b40cda82f2c,
         type: 3}
@@ -19810,8 +19810,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 519870843}
-  m_LocalRotation: {x: 0.03839521, y: 0.40436342, z: 0.016993236, w: -0.91363406}
-  m_LocalPosition: {x: 8.174523, y: -29.666946, z: -9.914601}
+  m_LocalRotation: {x: -0, y: 0.704113, z: -0, w: -0.7100879}
+  m_LocalPosition: {x: 21.1202, y: -12.556385, z: 2.6571646}
   m_LocalScale: {x: 0.09305772, y: 1.1329279, z: 0.06340569}
   m_Children: []
   m_Father: {fileID: 1422531202}
@@ -31534,6 +31534,83 @@ MonoBehaviour:
   materialName: stone
   optionsMessageToExport: 
   inventoryUI: {fileID: 2067415944}
+--- !u!1 &793375458
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 793375460}
+  - component: {fileID: 793375459}
+  m_Layer: 0
+  m_Name: DialogueHolder
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &793375459
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 793375458}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 46d8887e2c1c71a4aa1d9093c8b0eec0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dialogue:
+    PlayerName: 
+    AIname: 
+    sentences:
+    - 'AI: Hey!'
+    - 'AI: ...'
+    - 'AI: Hey!'
+    - 'AI: HEY!'
+    - 'AI: ...'
+    - 'AI: *Sigh*'
+    - 'AI: WAKE UP WAKE UP IT''S SUNDAY MORNING!'
+    - 'You: ... aAh!'
+    - 'AI: You finally wake up! Are you okay?'
+    - 'You: Ugh... Where are we... ?'
+    - 'AI: Looks like you''re still quite confused...
+
+      We collided with an
+      asteroid and the accident must have diverted us.
+
+'
+    - 'You: To... where?'
+    - 'AI: Good question. My location systems are down, so as the ship. It got divided
+      into two parts.'
+    - 'You: Any idea where the other half is?'
+    - 'AI: Yeah, it looks like it''s inside that pyramid...'
+    - 'You: Okay, time to break it down!'
+    - 'AI: NOT SO FAST! Although I don''t find life signs, all these ruins seem to
+      be emmiting two signals. '
+    - 'AI: one with instructions, and other with an incomplete message. They all
+      have different instructions, but seem to provide info on how to repair them'
+    - 'You: So... We should repair them first?'
+    - 'AI: Looks like so, although all but the five ruins closer to the pyramid seem
+      to be breakable with a material inside... You decide what to do, but I''d suggest
+      repairing'
+--- !u!4 &793375460
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 793375458}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -168.4, y: 12.146, z: -5.3}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 19
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &794720357
 GameObject:
   m_ObjectHideFlags: 0
@@ -33256,7 +33333,7 @@ MonoBehaviour:
   isPlayerOnADialogue: 0
   isPlayerOnPause: 0
   PauseMenu: {fileID: 1665112868}
-  initalDialogue: {fileID: 1655630484}
+  initalDialogue: {fileID: 793375459}
   finalDialogue: {fileID: 0}
 --- !u!114 &918276247
 MonoBehaviour:
@@ -38568,7 +38645,7 @@ PrefabInstance:
     - target: {fileID: 3007839060004128942, guid: cd09056b577fa8c458d09dd01348ca91,
         type: 3}
       propertyPath: m_RootOrder
-      value: 18
+      value: 16
       objectReference: {fileID: 0}
     - target: {fileID: 3007839060004128942, guid: cd09056b577fa8c458d09dd01348ca91,
         type: 3}
@@ -51916,65 +51993,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: -260.00052}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!1 &1339995984
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1339995986}
-  - component: {fileID: 1339995985}
-  m_Layer: 0
-  m_Name: Final Dialogue Bad ending
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1339995985
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1339995984}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 46d8887e2c1c71a4aa1d9093c8b0eec0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  dialogue:
-    PlayerName: 
-    AIname: 
-    sentences:
-    - 'AI: So, this is it... How advanced are we that we only need to bring together
-      the pieces o a ship to put it back together...'
-    - 'You: Yeah, quite advanced... Anyway, let''s mark this place for colonization.'
-    - 'AI: Right away...'
-    - '???: HOW DARE YOU'
-    - 'AI: ...'
-    - 'You: ... Sorry?'
-    - '???: IF YOU LISTENED BETTER, THEN YOU WOULDN''T BE SAYING THAT. CONQUER THIS
-      PLACE, AND REPEAT THE STORY YOU WORO TOLD BUT DIDN''T LISTEN TO'
-    - 'You: ... Yeah whatever, go to eternal resting '
-    - 'You: ... Yeah whatever, go to eternal resting '
-    - '???: I WILL NOT RETURN ALONE'
---- !u!4 &1339995986
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1339995984}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -168.4, y: 12.146, z: -5.3}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 16
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1344795078
 GameObject:
   m_ObjectHideFlags: 0
@@ -52537,7 +52555,7 @@ PrefabInstance:
     - target: {fileID: 6969778141227597661, guid: 319f246b99a9162408aec1a5a35f1605,
         type: 3}
       propertyPath: m_RootOrder
-      value: 20
+      value: 18
       objectReference: {fileID: 0}
     - target: {fileID: 6969778141227597661, guid: 319f246b99a9162408aec1a5a35f1605,
         type: 3}
@@ -63900,64 +63918,6 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!1 &1655630483
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1655630485}
-  - component: {fileID: 1655630484}
-  m_Layer: 0
-  m_Name: Final Dialogue Good ending
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1655630484
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1655630483}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 46d8887e2c1c71a4aa1d9093c8b0eec0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  dialogue:
-    PlayerName: 
-    AIname: 
-    sentences:
-    - 'AI: So, this is it... How advanced are we that we only need to bring together
-      the pieces o a ship to put it back together...'
-    - 'You: maybe the developers didn''t have enough time...'
-    - 'AI: What?'
-    - 'You: Bad Joke, don''t mind it'
-    - 'AI: ...'
-    - 'AI: Anyway. so... will we mark this for colonization?'
-    - 'You: ... No, I don''t think so. This place has had enough of civilizations
-      wanting everything from it.'
-    - 'AI: ... Okay ... Well, board the ship, let''s go back home. I''ll send a report
-      while youre at it'
---- !u!4 &1655630485
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1655630483}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -168.4, y: 12.146, z: -5.3}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 15
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1660606480
 GameObject:
   m_ObjectHideFlags: 0
@@ -91721,7 +91681,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 17
+  m_RootOrder: 15
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2064453938
 GameObject:
@@ -91790,8 +91750,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2064453938}
-  m_LocalRotation: {x: 0.13260236, y: 0.32780865, z: 0.046542328, w: -0.93423337}
-  m_LocalPosition: {x: 12.843839, y: -9.059754, z: 15.703108}
+  m_LocalRotation: {x: -0, y: 0.704113, z: -0, w: -0.7100879}
+  m_LocalPosition: {x: 21.1202, y: -12.556385, z: 2.6571646}
   m_LocalScale: {x: 0.12241797, y: 1.3208904, z: 0.054129127}
   m_Children: []
   m_Father: {fileID: 1422531202}
