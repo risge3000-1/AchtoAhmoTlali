@@ -106,12 +106,20 @@ public class PlayerUIController : MonoBehaviour
 
     private void OnTriggerStay(Collider other)
     {
-        isPlayerOnACollision = true;
+        if (other.GetComponent<WaterCollider>() == null && other.GetComponent<BaseReader>() == null)
+            isPlayerOnACollision = true;
+
+
 
         if (other.GetComponent<RepairableRuin>() != null)
         {
             importedRuinMessageText = other.GetComponent<RepairableRuin>().ExportStoryText();
             importedRuinOptionsText = other.GetComponent<RepairableRuin>().optionsMessageToExport;
+        }
+        else if (other.GetComponent<Phase2Ruins>() != null)
+        {
+            importedRuinMessageText = other.GetComponent<Phase2Ruins>().ExportStoryText();
+            importedRuinOptionsText = other.GetComponent<Phase2Ruins>().optionsMessageToExport;
         }
         else if (other.GetComponent<RepairingMaterialsScript>() != null)
         {
@@ -120,7 +128,7 @@ public class PlayerUIController : MonoBehaviour
         }
         else if (other.GetComponent<PyramidControler>() != null)
         {
-            importedPyramidOptionsText = "Maybe interacting with the ruins will open it...";
+            importedPyramidOptionsText = "";
         }
 
         UpdateTexts();
@@ -224,16 +232,18 @@ public class PlayerUIController : MonoBehaviour
         }
         else if (GetComponent<PlayerScore>().pyramidControler.hasPhase2Begun)
         {
-            importedPyramidMessageText = "You're missing " + missingPhase2Ruins + " ruins to be correctly placed..";
+            importedPyramidMessageText =  missingPhase2Ruins + " ruins are still on the wrong spot...";
         }
         else
         {
-            importedPyramidMessageText = "You're missing " + uninteractedPhase1Ruins + " ruins to ether repair or destroy and something else...";
+            importedPyramidMessageText = "Look around, " + uninteractedPhase1Ruins + " ruins still want to be treated";
         }
     }
 
     public string MessagesTextPrioritizer()
     {
+        Debug.Log("isPlareMaterial as" + isPlayerNearAMaterial);
+        
         if (isPlayerOnARuin || isPlayerOnAFixedRuin)
             return importedRuinMessageText;
         

@@ -75,6 +75,12 @@ public class PlayerMovement : MonoBehaviour
             z = Input.GetAxis("Vertical");
         }
 
+
+        if (Input.GetKey(KeyCode.LeftShift))
+        {
+            x *= 2;
+            z *= 2;
+        }
         Vector3 move = transform.right * x + transform.forward * z;
         controller.Move(move*speed*Time.deltaTime);
 
@@ -122,17 +128,17 @@ public class PlayerMovement : MonoBehaviour
     private void OnTriggerEnter(Collider collision)
     {
         //if I'm colliding with a ruin and this ruin has NOT ben fixed
-        if (collision.gameObject.GetComponent<RepairableRuin>() != null )
+        if (collision.gameObject.GetComponent<RepairableRuin>() != null || collision.gameObject.GetComponent<Phase2Ruins>() != null)
         {
-            if (collision.gameObject.GetComponent<Phase2Ruins>() != null)
+            if (collision.gameObject.GetComponent<Phase2Ruins>() != null && !collision.gameObject.GetComponent<Phase2Ruins>().haveIBeenRepaired)
             {
                 GetComponentInChildren<PriorityAssigner>().DefinePriority();
                 IAmInABrokenRuin();
             }
-            else if (collision.gameObject.GetComponent<RepairableRuin>().haveIBeenRepaired == false)
+            else if (!collision.gameObject.GetComponent<RepairableRuin>().haveIBeenRepaired)
                 IAmInABrokenRuin();
             
-            else
+            else if (collision.gameObject.GetComponent<RepairableRuin>().haveIBeenRepaired)
                 IamInAFixedRuin();
         }
 

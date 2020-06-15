@@ -13,6 +13,8 @@ public class PyramidControler : MonoBehaviour
                 hasUserPutAllRuinsInTheCorrectPlace = false,
                 hasPhase2Begun = false;
 
+    public DialogueManager goodEnding, badEnding;adrugada...
+
     public delegate void PyramidLocationActions();
     public static event PyramidLocationActions PlayerIsNearThePyramid, PlayerIsNotNearThePyramid;
     
@@ -22,20 +24,7 @@ public class PyramidControler : MonoBehaviour
     {
         mRenderer = GetComponent<MeshRenderer>();
     }
-
-    public void Update()
-    {
-        if (hasNotChangedColorsYet)
-        {
-            if (hasUserinteractedWithAllRuins)
-                mRenderer.material.color = Color.cyan;
-            else
-                mRenderer.material.color = Color.yellow;
-
-            hasNotChangedColorsYet = false;
-        }
-    }
-
+    
     private void OnTriggerEnter(Collider other)
     {
         if (other.GetComponent<PlayerMovement>() != null)

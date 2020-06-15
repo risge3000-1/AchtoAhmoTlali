@@ -12,7 +12,7 @@ public class SunRotation : MonoBehaviour
     void Update()
     {
         if (isRotationActive)
-            transform.Rotate(Vector3.right * Time.deltaTime);
+            transform.Rotate(new Vector3(0,0,1) * Time.deltaTime);
 
         //if rotation value is between 15 and 0 (inclusive) or between 360 and 270 (also inclusive), say it is night. Otherwise, it's not night
         //Uncomment the line below to know why the rotation is set like that. I don't unrestand that particular Unity logic as well

@@ -31,9 +31,11 @@ public class Phase2Ruins : RepairableRuin
     }
     private void OnMouseDown()
     {
-        var distance = transform.position - GameObject.Find("PickingPositionObject").transform.position;
-        
-        if (distance.magnitude <= 6 && hasPhase2Begun)
+        var distance = transform.position - DestinyPoint.transform.position;
+
+        Debug.Log("mag as" + distance.magnitude);
+
+        if (distance.magnitude <= 20 && hasPhase2Begun)
         {
             amIBeingPickedUp = true;
             
@@ -43,7 +45,11 @@ public class Phase2Ruins : RepairableRuin
             GetComponent<MeshCollider>().enabled = false;
 
             transform.position = DestinyPoint.position;
-            transform.parent = GameObject.Find("PickingPositionObject").transform;
+
+            Debug.Log("using " + DestinyPoint.position + "as new position Vlaue");
+
+            transform.rotation = new Quaternion(0, 0, 0, 0);
+            transform.parent = DestinyPoint.transform;
         }
     }
 

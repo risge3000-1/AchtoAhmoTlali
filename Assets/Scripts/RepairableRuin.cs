@@ -91,6 +91,8 @@ public class RepairableRuin : MonoBehaviour
     private void OnTriggerEnter(Collider other) /*HERE IS THE OPTIONS ALTERATION SCRIPT*/
     {
         bool isItem0Aviable = false, isItem1Aviable = false ;
+
+        string Phase2RuinOption = " | L Click - Pick up";
         
         if (other.gameObject.GetComponent<PlayerMovement>() != null)
         {
@@ -147,6 +149,9 @@ public class RepairableRuin : MonoBehaviour
 
                     }
                 }
+
+                if (amIAPhase2Ruin)
+                    optionsMessageToExport += Phase2RuinOption;
             }
             
             else if (amIAPhase2Ruin && !hasPhase2Begun)
