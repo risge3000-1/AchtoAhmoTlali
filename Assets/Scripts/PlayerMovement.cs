@@ -19,7 +19,8 @@ public class PlayerMovement : MonoBehaviour
                        hasInteractedWithAllRuins = false,
                        recheckedOnceCollisions = false;
     
-    public bool isPlayerOnADialogue = false;
+    public bool isPlayerOnADialogue = false,
+                isPlayerOnPause = false;
 
     public static string materialTypeToGive;
 
@@ -34,16 +35,27 @@ public class PlayerMovement : MonoBehaviour
     bool isGrounded;
 
     public delegate void PositionEvents();
-    public static event PositionEvents IAmInABrokenRuin, IamInAFixedRuin, IAmNearAMaterial, IAmNotInARuin, IAmNotNearAMaterial, IAmNearThePyramid, IAmNotInThePyramid;
+    public static  event PositionEvents IAmInABrokenRuin, 
+                                        IamInAFixedRuin, 
+                                        IAmNearAMaterial, 
+                                        IAmNotInARuin, 
+                                        IAmNotNearAMaterial, 
+                                        IAmNearThePyramid, 
+                                        IAmNotInThePyramid;
 
     public delegate void UserActionsEvents();
-    public static event UserActionsEvents IrepairedARuin, IDestroyedARuin, IPickedUpSomething;
+    public static  event UserActionsEvents IrepairedARuin,  
+                                           IDestroyedARuin, 
+                                           IPickedUpSomething;
 
     private void Start()
     {
         PlayerScore.HasInteractedWithAllRuins += PlayerHasInteractedWithallRuins;
         DialogueManager.PlayerIsInADialogue += PlayerIsInADialogue;
         DialogueManager.PlayerIsNotInADialogue += PlayerIsNotInADialogue;
+        PlayerUIController.PlayerIsInPause += PlayerIsOnPause;
+        PlayerUIController.PlayerisNotInPause += PlayerIsNotOnPause;
+
         audioStepsManager = GetComponentInChildren<AudioStepsManager>();
     }
 
@@ -57,7 +69,7 @@ public class PlayerMovement : MonoBehaviour
         float x = 0;
         float z= 0;
 
-        if (!isPlayerOnADialogue)
+        if (!isPlayerOnADialogue && !isPlayerOnPause)
         {
             x = Input.GetAxis("Horizontal");
             z = Input.GetAxis("Vertical");
@@ -88,11 +100,10 @@ public class PlayerMovement : MonoBehaviour
                 IrepairedARuin();
                 IamInAFixedRuin();
             }
-            else if (aRuinHasBeenDestroyed)
-            {
 
+            else if (aRuinHasBeenDestroyed)
                 IDestroyedARuin();
-            }
+          
 
             aRuinGotRepaired = false;
             aRuinHasBeenDestroyed = false;
@@ -111,7 +122,7 @@ public class PlayerMovement : MonoBehaviour
     private void OnTriggerEnter(Collider collision)
     {
         //if I'm colliding with a ruin and this ruin has NOT ben fixed
-       if (collision.gameObject.GetComponent<RepairableRuin>() != null )
+        if (collision.gameObject.GetComponent<RepairableRuin>() != null )
         {
             if (collision.gameObject.GetComponent<Phase2Ruins>() != null)
             {
@@ -119,30 +130,27 @@ public class PlayerMovement : MonoBehaviour
                 IAmInABrokenRuin();
             }
             else if (collision.gameObject.GetComponent<RepairableRuin>().haveIBeenRepaired == false)
-            {
                 IAmInABrokenRuin();
-            }
+            
             else
                 IamInAFixedRuin();
         }
+
         else if (collision.gameObject.GetComponent<RepairingMaterialsScript>() != null)
-        {
             IAmNearAMaterial();
-        }
+        
         else if (collision.gameObject.GetComponent<PyramidControler>() != null)
         {            
             IAmNearThePyramid();
 
             GetComponent<PlayerUIController>().AlterPyramidMessageText();
             if (hasInteractedWithAllRuins)
-            {
                 QuitGame();
-            }
+   
         }
+
         else if (collision.gameObject.GetComponent<WaterCollider>() != null)
-        {
             audioStepsManager.SwitchToWater();
-        }
 
     }
 
@@ -176,7 +184,7 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    private void QuitGame()
+    public void QuitGame()
     {
         new WaitForSeconds(3);
         Application.Quit();
@@ -195,5 +203,15 @@ public class PlayerMovement : MonoBehaviour
     private void PlayerIsNotInADialogue()
     {
         isPlayerOnADialogue = false;
+    }
+
+    private void PlayerIsOnPause()
+    {
+        isPlayerOnPause = true;
+    }
+
+    private void PlayerIsNotOnPause()
+    {
+        isPlayerOnPause = false;
     }
 }

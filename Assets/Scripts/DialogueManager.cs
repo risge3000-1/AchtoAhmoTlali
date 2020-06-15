@@ -14,6 +14,10 @@ public class DialogueManager : MonoBehaviour
     public AudioSource botSounds,
                        playerSounds;
 
+    public SpecialEvents specialEvents;
+
+    bool hasBlackoutEventStarted = false;
+
     public delegate void DialogueEvents();
     public static event DialogueEvents PlayerIsInADialogue, PlayerIsNotInADialogue;
 
@@ -57,14 +61,19 @@ public class DialogueManager : MonoBehaviour
         StopAllCoroutines();
 
         if (sentence.StartsWith("AI:"))
-        {
             botSounds.Play();
-        }
-        else if (sentence.StartsWith("You:"))
-        {
-            playerSounds.Play();
-        }
         
+        else if (sentence.StartsWith("You:"))
+            playerSounds.Play();
+
+        if (sentence.Contains("aAh!"))
+        {
+            specialEvents.QuitBlackout();
+            hasBlackoutEventStarted = true;
+        }
+            
+        
+
         StartCoroutine(TypeSentence(sentence));
     }
 
@@ -73,6 +82,12 @@ public class DialogueManager : MonoBehaviour
         PlayerIsNotInADialogue();
         
         animator.SetBool("IsOpen", false);
+
+        if (!hasBlackoutEventStarted)
+        {
+            specialEvents.QuitBlackout();
+            hasBlackoutEventStarted = true;
+        }
     }
 
     IEnumerator TypeSentence (string sentence)
@@ -87,4 +102,5 @@ public class DialogueManager : MonoBehaviour
         botSounds.Stop();
         playerSounds.Stop();
     }
+
 }

@@ -13,16 +13,6 @@ public class PlayerUIController : MonoBehaviour
          haveIImportedTheRuinStory = false,
          isPlayerOnACollision = false;
 
-    public enum WhatInfoHasPriority
-    {
-        itemOptions,
-        ruinOptions,
-        ruinStory,
-        missingRuins,
-        nothing
-
-    }
-
     public Text OptionsText,
                 MessagesText;
 
@@ -36,8 +26,14 @@ public class PlayerUIController : MonoBehaviour
                   importedRuinMessageText,
                   importedPyramidMessageText;
 
-    public bool isPlayerOnADialogue = false;
+    public bool isPlayerOnADialogue = false,
+                isPlayerOnPause = false;
 
+    public GameObject PauseMenu;
+
+
+    public delegate void PauseEvents();
+    public static event PauseEvents PlayerIsInPause, PlayerisNotInPause;
 
     Color newOptionsTextColor,
           newMessagesTextColor;
@@ -81,24 +77,29 @@ public class PlayerUIController : MonoBehaviour
 
     private void Update()
     {
-        //This is Only to fix the bug for when the payer interacts with te first ruin.
-
-        //AlterMissingRuinsMessage();
 
         if (isPlayerOnACollision)
-        {
-            SolidifyText(true);
-        }
+           SolidifyText(true);
+        
         else
             SolidifyText(false);
-
-        if (Input.GetKey(KeyCode.Escape) || isPlayerOnADialogue)
-            Cursor.lockState = CursorLockMode.None;
-        else if (!isPlayerOnADialogue)
-        {
-            Cursor.lockState = CursorLockMode.Locked;
-        }
             
+
+        if (!isPlayerOnADialogue && Input.GetKeyDown(KeyCode.Escape))
+        {
+            if (!isPlayerOnPause)
+                pausePlayer(true);
+            
+            else
+                pausePlayer(false); 
+            
+        }
+        
+        if (!isPlayerOnADialogue && !isPlayerOnPause)
+            Cursor.lockState = CursorLockMode.Locked;
+        
+        else
+            Cursor.lockState = CursorLockMode.None; 
 
         UpdateTexts();
     }
@@ -268,6 +269,25 @@ public class PlayerUIController : MonoBehaviour
 
         OptionsText.text = newOptionsText;
         MessagesText.text = newMessagesText;
+    }
+
+    public void pausePlayer(bool activatePause)
+    {
+        if (activatePause)
+        {
+            Cursor.lockState = CursorLockMode.None;
+            PlayerIsInPause();
+            Time.timeScale = 0;
+        }
+        else
+        {
+            Cursor.lockState = CursorLockMode.Locked;
+            PlayerisNotInPause();
+            Time.timeScale = 1;
+        }
+
+        isPlayerOnPause = activatePause;
+        PauseMenu.SetActive(activatePause);
     }
 
     void PlayerIsInADialogue()

@@ -14,17 +14,20 @@ public class FPSCamera : MonoBehaviour
    
     float accumulatedYRotation = 0;
     
-    bool isPlayerOnADialogue = false;
+    bool isPlayerOnADialogue = false,
+        isPlayerOnPause = false;
 
     private void Start()
     {
         DialogueManager.PlayerIsInADialogue += PlayerIsInADialogue;
         DialogueManager.PlayerIsNotInADialogue += PlayerIsNotOnADialogue;
+        PlayerUIController.PlayerIsInPause += PlayerIsOnPause;
+        PlayerUIController.PlayerisNotInPause += PlayerIsNotOnPause;
     }
 
     void Update()
     {
-        if (!isPlayerOnADialogue)
+        if (!isPlayerOnADialogue && !isPlayerOnPause)
         {
             horizontalMovement = horizontalSpeed * Input.GetAxis("Mouse X");
             verticalMovement = verticalSpeed * Input.GetAxis("Mouse Y");
@@ -60,5 +63,14 @@ public class FPSCamera : MonoBehaviour
         isPlayerOnADialogue = false;
     }
 
+    private void PlayerIsOnPause()
+    {
+        isPlayerOnPause = true;
+    }
 
+    private void PlayerIsNotOnPause()
+    {
+        isPlayerOnPause = false;
+    }
 }
+

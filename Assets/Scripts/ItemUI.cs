@@ -8,10 +8,17 @@ public class ItemUI : MonoBehaviour
     public Item item;
     private Image spriteImage;
 
+    Image slotBG ;
+    Color newColor;
+
     private void Awake()
     {
         spriteImage = GetComponent<Image>();
         UpdateItem(null);
+        slotBG = transform.parent.GetComponent<Image>();
+        newColor = slotBG.color;
+
+        newColor.a = 0;
     }
 
     public void UpdateItem(Item item)
@@ -30,6 +37,22 @@ public class ItemUI : MonoBehaviour
         else
         {
             spriteImage.color = Color.clear;
+        }
+    }
+
+    public void GraduallyAppear()
+    {
+        StartCoroutine(GraddualyColor());
+    }
+
+    IEnumerator GraddualyColor()
+    {
+        
+        for (float newAlpha = 0; newAlpha < 1; newAlpha += Time.deltaTime / 4)
+        {
+            newColor.a = newAlpha;
+            slotBG.color = newColor;
+            yield return null;
         }
     }
 }
