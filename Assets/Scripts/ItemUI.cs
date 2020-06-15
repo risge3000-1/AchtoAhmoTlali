@@ -48,7 +48,7 @@ public class ItemUI : MonoBehaviour
     IEnumerator GraddualyColor()
     {
         
-        for (float newAlpha = 0; newAlpha < 1; newAlpha += Time.deltaTime / 4)
+        for (float newAlpha = 0; newAlpha < 1; newAlpha += Time.deltaTime * 1.5f)
         {
             newColor.a = newAlpha;
             slotBG.color = newColor;
